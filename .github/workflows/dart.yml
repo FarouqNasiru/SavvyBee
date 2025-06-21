@@ -5,64 +5,53 @@ on:
 
 jobs:
   build-ios:
-    name: 🎉 iOS Build
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v3
 
       - uses: subosito/flutter-action@v2
         with:
-          channel: 'stable'
-          architecture: x64
+          flutter-version: "stable"
 
-      - name: Set iOS deployment target (13.0)
-        run: |
-          # Update Podfile platform
-          if [ -f "ios/Podfile" ]; then
-            sed -i '' "s/^platform :ios.*/platform :ios, '13.0'/" ios/Podfile || echo "No existing platform line, adding new one"
-            if ! grep -q "platform :ios" ios/Podfile; then
-              echo "platform :ios, '13.0'" >> ios/Podfile
-            fi
-          fi
-          
-          # Update Xcode project settings (both old and new style targets)
-          sed -i '' "s/IPHONEOS_DEPLOYMENT_TARGET = [^;]*;/IPHONEOS_DEPLOYMENT_TARGET = 13.0;/g" ios/Runner.xcodeproj/project.pbxproj
-          sed -i '' "s/MARKETING_VERSION = [^;]*;/MARKETING_VERSION = 13.0;/g" ios/Runner.xcodeproj/project.pbxproj
-          sed -i '' "s/DEVELOPMENT_TEAM = [^;]*;/DEVELOPMENT_TEAM = '';/g" ios/Runner.xcodeproj/project.pbxproj
-          
-          # Also update Info.plist if needed
-          if [ -f "ios/Runner/Info.plist" ]; then
-            plutil -replace MinimumOSVersion -string "13.0" ios/Runner/Info.plist
-          fi
+      - name: Install CocoaPods
+        run: sudo gem install cocoapods
 
-      - name: Clean build
-        run: flutter clean
-
-      - name: Get dependencies
-        run: flutter pub get
-
-      - name: Update CocoaPods
+      - name: Create Podfile if missing
         run: |
           cd ios
-          pod repo update
-          pod install
+          if [ ! -f "Podfile" ]; then
+            echo "platform :ios, '13.0'" > Podfile
+            echo "target 'Runner' do" >> Podfile
+            echo "  use_frameworks!" >> Podfile
+            echo "  use_modular_headers!" >> Podfile
+            echo "end" >> Podfile
+          fi
           cd ..
 
-      - name: Build iOS
+      - name: Set iOS deployment target
+        run: |
+          sed -i '' 's/IPHONEOS_DEPLOYMENT_TARGET = [^;]*;/IPHONEOS_DEPLOYMENT_TARGET = 13.0;/g' ios/Runner.xcodeproj/project.pbxproj
+          plutil -replace MinimumOSVersion -string "13.0" ios/Runner/Info.plist
+
+      - name: Install dependencies
+        run: |
+          flutter pub get
+          cd ios
+          pod install --repo-update
+          cd ..
+
+      - name: Build IPA
         run: flutter build ios --release --no-codesign
 
-      - name: Prepare IPA
+      - name: Package IPA
         run: |
           cd build/ios/iphoneos
           mkdir -p Payload
           mv Runner.app Payload/
-          zip -qr FlutterIpaExport.ipa Payload
+          zip -qr app.ipa Payload
 
-      - name: Upload IPA
-        uses: svenstaro/upload-release-action@v2
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
         with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: build/ios/iphoneos/FlutterIpaExport.ipa
-          tag: v1.0
-          overwrite: true
-          body: "iOS release build"
+          name: app.ipa
+          path: build/ios/iphoneos/app.ipa
