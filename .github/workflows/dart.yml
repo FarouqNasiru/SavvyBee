@@ -1,4 +1,4 @@
-name: iOS-ipa-build
+name: iOS-IPA-Build-No-Cocoapods
 
 on:
   workflow_dispatch:
@@ -9,39 +9,46 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - uses: subosito/flutter-action@v2
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
         with:
-          flutter-version: "stable"
+          flutter-version: 'stable'
+          architecture: x64
 
-      - name: Install CocoaPods
-        run: sudo gem install cocoapods
+      - name: Disable CocoaPods
+        run: flutter config --no-enable-ios-cocoapods
 
-      - name: Create Podfile if missing
+      - name: Clean and regenerate iOS project
         run: |
-          cd ios
-          if [ ! -f "Podfile" ]; then
-            echo "platform :ios, '13.0'" > Podfile
-            echo "target 'Runner' do" >> Podfile
-            echo "  use_frameworks!" >> Podfile
-            echo "  use_modular_headers!" >> Podfile
-            echo "end" >> Podfile
-          fi
-          cd ..
-
-      - name: Set iOS deployment target
-        run: |
+          rm -rf ios
+          flutter create --platforms ios --no-pub --project-name runner .
           sed -i '' 's/IPHONEOS_DEPLOYMENT_TARGET = [^;]*;/IPHONEOS_DEPLOYMENT_TARGET = 13.0;/g' ios/Runner.xcodeproj/project.pbxproj
           plutil -replace MinimumOSVersion -string "13.0" ios/Runner/Info.plist
 
-      - name: Install dependencies
+      - name: Modify project for no-CocoaPods build
         run: |
-          flutter pub get
-          cd ios
-          pod install --repo-update
-          cd ..
+          # Remove Pods references from project
+          sed -i '' '/Pods_Runner.framework/d' ios/Runner.xcodeproj/project.pbxproj
+          sed -i '' '/PODS_ROOT/d' ios/Runner.xcodeproj/project.pbxproj
+          
+          # Add manual framework dependencies
+          echo '<?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+              <key>com.apple.security.cs.allow-dyld-environment-variables</key>
+              <true/>
+              <key>com.apple.security.network.client</key>
+              <true/>
+              <key>com.apple.security.network.server</key>
+              <true/>
+          </dict>
+          </plist>' > ios/Runner/DebugProfile.entitlements
 
       - name: Build IPA
-        run: flutter build ios --release --no-codesign
+        run: |
+          flutter pub get
+          flutter build ios --release --no-codesign --no-pub
 
       - name: Package IPA
         run: |
