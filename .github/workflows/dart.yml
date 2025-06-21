@@ -14,29 +14,49 @@ jobs:
         with:
           channel: 'stable'
           architecture: x64
-      - run: flutter pub get
-      
 
-      - run: pod repo update
+      - name: Set iOS deployment target
+        run: |
+          # Update Podfile if it exists
+          if [ -f "ios/Podfile" ]; then
+            sed -i '' "s/platform :ios, .*/platform :ios, '13.0'/" ios/Podfile
+          fi
+          
+          # Update Xcode project settings
+          sed -i '' "s/IPHONEOS_DEPLOYMENT_TARGET = [^;]*;/IPHONEOS_DEPLOYMENT_TARGET = 13.0;/g" ios/Runner.xcodeproj/project.pbxproj
+          sed -i '' "s/MARKETING_VERSION = [^;]*;/MARKETING_VERSION = 13.0;/g" ios/Runner.xcodeproj/project.pbxproj
+
+      - name: Install Flutter dependencies
+        run: flutter pub get
+
+      - name: Update CocoaPods repository
+        run: pod repo update
         working-directory: ios
 
-      - run: flutter build ios --release --no-codesign
+      - name: Install CocoaPods dependencies
+        run: pod install
+        working-directory: ios
 
-      - run: mkdir Payload
+      - name: Build iOS release
+        run: flutter build ios --release --no-codesign
+
+      - name: Prepare IPA directory structure
+        run: mkdir -p Payload
         working-directory: build/ios/iphoneos
 
-      - run: mv Runner.app/ Payload
+      - name: Move app bundle to Payload
+        run: mv Runner.app Payload/
         working-directory: build/ios/iphoneos
 
-      - name: Zip output
-        run: zip -qq -r -9 FlutterIpaExport.ipa Payload
+      - name: Create IPA archive
+        run: zip -qr FlutterIpaExport.ipa Payload
         working-directory: build/ios/iphoneos
 
-      - name: Upload binaries to release
+      - name: Upload IPA to release
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: build/ios/iphoneos/FlutterIpaExport.ipa
           tag: v1.0
           overwrite: true
-          body: "This is first release"
+          body: "iOS release build"
