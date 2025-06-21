@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "364827717820",
+    "project_id": "savvybee-de8f6",
+    "storage_bucket": "savvybee-de8f6.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:364827717820:android:8df5ab5fe5837f418220b9",
+        "android_client_info": {
+          "package_name": "com.example.savvybee"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAE1_wBDJBtRDBTHui1YGwovRIxVvtK9tk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
