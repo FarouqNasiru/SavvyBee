@@ -1,64 +1,42 @@
-name: iOS-IPA-Build-No-Cocoapods
+name: iOS-ipa-build
 
 on:
   workflow_dispatch:
 
 jobs:
   build-ios:
+    name: 🎉 iOS Build
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v3
 
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
+      - uses: subosito/flutter-action@v2
         with:
-          flutter-version: 'stable'
+          channel: 'stable'
           architecture: x64
+      - run: flutter pub get
+      
 
-      - name: Disable CocoaPods
-        run: flutter config --no-enable-ios-cocoapods
+      - run: pod repo update
+        working-directory: ios
 
-      - name: Clean and regenerate iOS project
-        run: |
-          rm -rf ios
-          flutter create --platforms ios --no-pub --project-name runner .
-          sed -i '' 's/IPHONEOS_DEPLOYMENT_TARGET = [^;]*;/IPHONEOS_DEPLOYMENT_TARGET = 13.0;/g' ios/Runner.xcodeproj/project.pbxproj
-          plutil -replace MinimumOSVersion -string "13.0" ios/Runner/Info.plist
+      - run: flutter build ios --release --no-codesign
 
-      - name: Modify project for no-CocoaPods build
-        run: |
-          # Remove Pods references from project
-          sed -i '' '/Pods_Runner.framework/d' ios/Runner.xcodeproj/project.pbxproj
-          sed -i '' '/PODS_ROOT/d' ios/Runner.xcodeproj/project.pbxproj
-          
-          # Add manual framework dependencies
-          echo '<?xml version="1.0" encoding="UTF-8"?>
-          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-          <plist version="1.0">
-          <dict>
-              <key>com.apple.security.cs.allow-dyld-environment-variables</key>
-              <true/>
-              <key>com.apple.security.network.client</key>
-              <true/>
-              <key>com.apple.security.network.server</key>
-              <true/>
-          </dict>
-          </plist>' > ios/Runner/DebugProfile.entitlements
+      - run: mkdir Payload
+        working-directory: build/ios/iphoneos
 
-      - name: Build IPA
-        run: |
-          flutter pub get
-          flutter build ios --release --no-codesign --no-pub
+      - run: mv Runner.app/ Payload
+        working-directory: build/ios/iphoneos
 
-      - name: Package IPA
-        run: |
-          cd build/ios/iphoneos
-          mkdir -p Payload
-          mv Runner.app Payload/
-          zip -qr app.ipa Payload
+      - name: Zip output
+        run: zip -qq -r -9 FlutterIpaExport.ipa Payload
+        working-directory: build/ios/iphoneos
 
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v3
+      - name: Upload binaries to release
+        uses: svenstaro/upload-release-action@v2
         with:
-          name: app.ipa
-          path: build/ios/iphoneos/app.ipa
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: build/ios/iphoneos/FlutterIpaExport.ipa
+          tag: v1.0
+          overwrite: true
+          body: "This is first release"
