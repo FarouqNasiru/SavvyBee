@@ -293,6 +293,7 @@ class QuizPage extends StatelessWidget {
           );
         }
         
+
         // Phase 2 (0.2-0.4): Shake effect while big
         if (value < 0.4) {
           final shakeProgress = (value - 0.2) / 0.2;
@@ -319,7 +320,7 @@ class QuizPage extends StatelessWidget {
                       style: GoogleFonts.manrope(
                         fontSize: 32,
                         fontWeight: FontWeight.w700,
-                        color: Color(0xFF000000),
+                        color: Colors.black,
                       ),
                     ),
                   ],
