@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:savvybee/home_page.dart';
 import 'question_provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'onboarding_data_provider.dart';
 
 class QuestionPage extends StatelessWidget {
   const QuestionPage({super.key});
@@ -41,8 +44,10 @@ class QuestionPage extends StatelessWidget {
                               height: screenHeight * 0.03,
                               width: screenWidth * 0.06,
                             ),
-                            onPressed: () {
-                              Navigator.of(context).pushReplacement(
+                            onPressed: () async {
+                              await saveOnboardingDataToFirestore(context);
+                              Navigator.pushReplacement(
+                                context,
                                 MaterialPageRoute(
                                     builder: (context) => HomePage()),
                               );
@@ -128,12 +133,17 @@ class QuestionPage extends StatelessWidget {
         Column(
           children: List.generate(
             question.options.length,
-            (index) => _buildOption(
-              context,
-              text: question.options[index],
-              isSelected: question.selectedIndex == index,
-              onTap: () => provider.selectOption(index),
-            ),
+            (index) => _buildOption(context,
+                text: question.options[index],
+                isSelected: question.selectedIndex == index, onTap: () {
+              provider.selectOption(index);
+              final onboardingProvider =
+                  Provider.of<OnboardingDataProvider>(context, listen: false);
+              onboardingProvider.addQuestionAnswer(
+                question.text,
+                question.options[index],
+              );
+            }),
           ),
         ),
       ],
@@ -191,7 +201,7 @@ class QuestionPage extends StatelessWidget {
 
     return SizedBox(
       width: double.infinity,
-      height: screenHeight * 0.07,
+      height: screenHeight * 0.06,
       child: Container(
         decoration: BoxDecoration(
           border: Border(
@@ -208,24 +218,26 @@ class QuestionPage extends StatelessWidget {
         ),
         child: ElevatedButton(
           onPressed: isAnswered
-              ? () {
+              ? () async {
                   if (provider.currentQuestionIndex <
                       provider.questions.length - 1) {
                     provider.nextQuestion();
-                    // Scroll to top for next question
-                    PrimaryScrollController.of(context)?.animateTo(
-                      0,
-                      duration: const Duration(milliseconds: 300),
-                      curve: Curves.easeOut,
-                    );
                   } else {
                     // Submit all answers
                     print("All questions answered!");
-                    Navigator.push(
+                    await saveOnboardingDataToFirestore(context);
+                    // Mark profile as completed in Firestore
+                    final user = FirebaseAuth.instance.currentUser;
+                    if (user != null) {
+                      await FirebaseFirestore.instance
+                          .collection('users')
+                          .doc(user.uid)
+                          .set({'profileCompleted': true},
+                              SetOptions(merge: true));
+                    }
+                    Navigator.pushReplacement(
                       context,
-                      MaterialPageRoute(
-                        builder: (context) => HomePage(),
-                      ),
+                      MaterialPageRoute(builder: (context) => HomePage()),
                     );
                   }
                 }
@@ -250,5 +262,18 @@ class QuestionPage extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+// Call this function when onboarding is done
+Future<void> saveOnboardingDataToFirestore(BuildContext context) async {
+  final onboardingData =
+      Provider.of<OnboardingDataProvider>(context, listen: false);
+  final user = FirebaseAuth.instance.currentUser;
+  if (user != null) {
+    await FirebaseFirestore.instance.collection('users').doc(user.uid).set(
+          onboardingData.toMap(),
+          SetOptions(merge: true),
+        );
   }
 }

@@ -12,7 +12,20 @@
           "package_name": "com.example.savvybee"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "364827717820-624h8hn7lfnabasl6c11l4ih2cgbrko9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.savvybee",
+            "certificate_hash": "6dfa1fedcf4860a1c375ff2f9cd613b789b1dceb"
+          }
+        },
+        {
+          "client_id": "364827717820-e6pkoto8g661s9osm904ra84v2j2u5fo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyAE1_wBDJBtRDBTHui1YGwovRIxVvtK9tk"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "364827717820-e6pkoto8g661s9osm904ra84v2j2u5fo.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "364827717820-4b7v4v5ijmh2mou47ucpjvso2ks2ajtb.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.savvybee"
+              }
+            }
+          ]
         }
       }
     }

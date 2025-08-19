@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:savvybee/home_page.dart';
+import 'package:savvybee/onboarding_data_provider.dart';
+import 'package:savvybee/onboarding_screens.dart';
 import 'package:savvybee/question_page.dart';
 import 'nin_provider.dart';
 
@@ -96,6 +98,7 @@ class BvnInputPage extends StatelessWidget {
 
   Widget _buildNinInputField(BuildContext context) {
     final bvnProvider = Provider.of<NinProvider>(context);
+    final onboardingData = Provider.of<OnboardingDataProvider>(context, listen: false);
 
     return Container(
       width: double.infinity,
@@ -119,7 +122,15 @@ class BvnInputPage extends StatelessWidget {
       ),
       child: TextField(
         controller: bvnProvider.bvnController,
-        onChanged: bvnProvider.updatebvn,
+        onChanged: (String? newValue) {
+          if (newValue != null) {
+            bvnProvider.updatebvn(newValue); // Clear the controller if empty
+            onboardingData.updateBVN(newValue); // Save empty BVN to provider
+           
+          }
+      
+        },
+        
         maxLength: 11,
         textAlign: TextAlign.center,
         keyboardType: TextInputType.number,

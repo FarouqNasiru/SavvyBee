@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:savvybee/home_page.dart';
+import 'package:savvybee/onboarding_data_provider.dart';
 import 'package:savvybee/onboarding_screen12.dart';
+import 'package:savvybee/onboarding_screens.dart';
 import 'country_provider.dart';
 
 class SavvyBeeOnboarding11 extends StatelessWidget {
@@ -11,6 +14,13 @@ class SavvyBeeOnboarding11 extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
+
+    // Set status bar to black icons
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: Brightness.dark, // Black icons for Android
+      statusBarBrightness: Brightness.light,    // Black icons for iOS
+    ));
 
     return ChangeNotifierProvider(
       create: (context) => CountryProvider(),
@@ -30,9 +40,9 @@ class SavvyBeeOnboarding11 extends StatelessWidget {
             },
           ),
           backgroundColor: Colors.white,
+          centerTitle: true,
           title: const Text(
             'Provide Identity and Tax Information',
-            textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w500,
@@ -40,7 +50,6 @@ class SavvyBeeOnboarding11 extends StatelessWidget {
               color: Colors.black,
             ),
           ),
-          // Placeholder for spacing
         ),
         backgroundColor: Colors.white,
         body: Padding(
@@ -98,6 +107,7 @@ class SavvyBeeOnboarding11 extends StatelessWidget {
 
   Widget _buildCountrySelector(BuildContext context) {
     final countryProvider = Provider.of<CountryProvider>(context);
+     final OnboardingData = Provider.of<OnboardingDataProvider>(context, listen: false);
     final selectedCountry = countryProvider.selectedCountry;
     final hasSelected = countryProvider.hasSelectedCountry;
 
@@ -135,7 +145,7 @@ class SavvyBeeOnboarding11 extends StatelessWidget {
         ),
         icon: const Padding(
           padding: EdgeInsets.only(right: 12.0),
-          child: Icon(Icons.arrow_drop_down, color: Colors.black, size: 30),
+          child: Icon(Icons.keyboard_arrow_down, color: Colors.black, size: 30),
         ),
         items: countryProvider.countries.map((Country country) {
           return DropdownMenuItem<Country>(
@@ -144,7 +154,26 @@ class SavvyBeeOnboarding11 extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 12.0),
               child: Row(
                 children: [
-                  Text(country.flag, style: const TextStyle(fontSize: 24)),
+                  Container(
+                    width: 24,
+                    height: 24,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Color(0xFFF5F5F5), // Optional: subtle background
+                    ),
+                    alignment: Alignment.center,
+                    child: ClipOval(
+                      child: Container(
+                        width: 20,
+                        height: 20,
+                        alignment: Alignment.center,
+                        child: Text(
+                          country.flag,
+                          style: const TextStyle(fontSize: 16),
+                        ),
+                      ),
+                    ),
+                  ),
                   const SizedBox(width: 12),
                   Text(
                     country.name,
@@ -162,6 +191,7 @@ class SavvyBeeOnboarding11 extends StatelessWidget {
         onChanged: (Country? newValue) {
           if (newValue != null) {
             countryProvider.setCountry(newValue);
+            OnboardingData.updateCountry(newValue.name); // <-- Save to onboarding provider
           }
         },
       ),

@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:savvybee/budgeting_page.dart';
+import 'package:savvybee/loading_screen.dart';
 import 'package:savvybee/navbar.dart';
 import 'package:savvybee/reusable_button.dart';
 import 'package:savvybee/savvybot_1.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:savvybee/streak_tracker.dart';
+import 'package:savvybee/website_screen.dart';
 import 'progress_provider.dart';
 
 class CardContentProvider with ChangeNotifier {
@@ -33,19 +36,28 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  String _firstName = 'User'; // Simplified to just first name
+  String _firstName = 'User';
   int _points = 0;
   int _hearts = 0;
   int _currentStreak = 0;
   List<bool> _activeDays = List.filled(7, false);
+  bool _isLoading = true; // <-- Add this
 
   @override
   void initState() {
     super.initState();
-    _loadUserData();
-    _initializeStreak();
-    // Load progress when the app starts
+    _loadAllData();
     Future.microtask(() => context.read<ProgressProvider>().loadProgress());
+  }
+
+  Future<void> _loadAllData() async {
+    await _loadUserData();
+    await _initializeStreak();
+    if (mounted) {
+      setState(() {
+        _isLoading = false; // <-- Set loading to false after all data is loaded
+      });
+    }
   }
 
   Future<void> _loadUserData() async {
@@ -66,28 +78,34 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-   Future<void> _initializeStreak() async {
+  Future<void> _initializeStreak() async {
     final result = await StreakTracker.trackAppOpen();
     final activeDayNames = await StreakTracker.getActiveDays();
-    
+
     if (mounted) {
       setState(() {
         _currentStreak = result.newStreak;
         _updateActiveDays(activeDayNames);
         _points += result.pointsEarned; // Add points from streak
-        
+
         if (result.isMilestoneReached) {
           _showMilestoneCelebration(result.milestone);
         }
       });
     }
   }
+
   void _updateActiveDays(List<String> activeDayNames) {
     final dayMap = {
-      'Mon': 0, 'Tue': 1, 'Wed': 2, 
-      'Thu': 3, 'Fri': 4, 'Sat': 5, 'Sun': 6
+      'Mon': 0,
+      'Tue': 1,
+      'Wed': 2,
+      'Thu': 3,
+      'Fri': 4,
+      'Sat': 5,
+      'Sun': 6
     };
-    
+
     setState(() {
       _activeDays = List.filled(7, false);
       for (final dayName in activeDayNames) {
@@ -97,12 +115,13 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
- void _showMilestoneCelebration(int milestone) {
+  void _showMilestoneCelebration(int milestone) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         title: Text('🎉 $milestone Day Streak!'),
-        content: Text('You\'ve maintained a $milestone day streak! Keep it up!'),
+        content:
+            Text('You\'ve maintained a $milestone day streak! Keep it up!'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
@@ -113,12 +132,22 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
+
+    if (_isLoading) {
+      // Show a loading spinner or splash while loading
+      return LoadingScreen();
+    }
+
+    // Set status bar to black icons
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: Brightness.dark, // Black icons for Android
+      statusBarBrightness: Brightness.light,    // Black icons for iOS
+    ));
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -127,7 +156,7 @@ class _HomePageState extends State<HomePage> {
           // User points display
           Padding(
             padding: EdgeInsets.only(
-              top: screenHeight * 0.06,
+              top: screenHeight * 0.075,
               left: screenWidth * 0.05,
               right: screenWidth * 0.05,
               bottom: screenHeight * 0.02,
@@ -180,26 +209,22 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
           ),
-          SizedBox(height: screenHeight * 0.015),
+          SizedBox(height: screenHeight * 0.005),
           // Week navigation
-          LayoutBuilder(
-            builder: (context, constraints) {
-              return SizedBox(
-                width: constraints.maxWidth,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    buildDayCircle('Mon', 0, screenHeight),
-                    buildDayCircle('Tue', 1, screenHeight),
-                    buildDayCircle('Wed', 2, screenHeight),
-                    buildDayCircle('Thu', 3, screenHeight),
-                    buildDayCircle('Fri', 4, screenHeight),
-                    buildDayCircle('Sat', 5, screenHeight),
-                    buildDayCircle('Sun', 6, screenHeight),
-                  ],
-                ),
-              );
-            },
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                buildDayCircle('Mon', 0, screenHeight),
+                buildDayCircle('Tue', 1, screenHeight),
+                buildDayCircle('Wed', 2, screenHeight),
+                buildDayCircle('Thu', 3, screenHeight),
+                buildDayCircle('Fri', 4, screenHeight),
+                buildDayCircle('Sat', 5, screenHeight),
+                buildDayCircle('Sun', 6, screenHeight),
+              ],
+            ),
           ),
           SizedBox(height: screenHeight * 0.03),
 
@@ -236,15 +261,13 @@ class _HomePageState extends State<HomePage> {
               );
             },
           ),
-
+          SizedBox(height: screenHeight * 0.03),
           // Display content based on selected card
           Consumer<CardContentProvider>(
             builder: (context, provider, child) {
               return Container(
-                margin: EdgeInsets.symmetric(
-                  horizontal: screenWidth * 0.05,
-                  vertical: screenHeight * 0.03,
-                ),
+                height: screenHeight * 0.54,
+                width: screenWidth * 0.9,
                 decoration: BoxDecoration(
                   border: const Border(
                     top: BorderSide(color: Colors.black, width: 2),
@@ -252,7 +275,7 @@ class _HomePageState extends State<HomePage> {
                     right: BorderSide(color: Colors.black, width: 4),
                     bottom: BorderSide(color: Colors.black, width: 4),
                   ),
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(12),
                 ),
                 child: Column(
                   children: [
@@ -300,15 +323,19 @@ class _HomePageState extends State<HomePage> {
 
                     // Image
                     Image.asset(
-                      'lib/assets/images/budgeting bee pose 3 1 (1).png',
-                      width: screenWidth * 1.0,
-                      height: screenHeight * 0.30,
+                      'lib/assets/images/budgeting bee pose 2 1.png',
+                      width: screenWidth * 1.5,
+                      height: screenHeight * 0.315,
                     ),
                     SizedBox(height: screenHeight * 0.02),
 
                     // Button with padding
                     Padding(
-                      padding: EdgeInsets.all(screenHeight * 0.01),
+                      padding: EdgeInsets.only(
+                        top: screenHeight * 0.01,
+                        left: screenWidth * 0.01,
+                        right: screenWidth * 0.01,
+                      ),
                       child: ReusableButton(
                         text: "Get started",
                         onPressed: () {
@@ -385,7 +412,11 @@ class _HomePageState extends State<HomePage> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => Savvybot1(),
+              builder: (context) => const WebsiteScreen(
+                url:
+                    'https://losingmymindone.vercel.app/', // Replace with your website URL
+                title: 'SavvyBot', // Optional title for the app bar
+              ),
             ),
           );
         },
@@ -404,11 +435,17 @@ class _HomePageState extends State<HomePage> {
       children: [
         CircleAvatar(
           radius: screenHeight * 0.028,
-          backgroundColor: _activeDays[dayIndex] ? Color(0xFFFFE975) : Color(0xFFD9D9D9),
-          child: Image.asset(
-            'lib/assets/images/small-hive.png',
-            width: screenHeight * 0.028,
-            height: screenHeight * 0.028,
+          backgroundColor:
+              _activeDays[dayIndex] ? Color(0xFFFFE975) : Color(0xFFD9D9D9),
+          child: ColorFiltered(
+            colorFilter: _activeDays[dayIndex]
+                ? const ColorFilter.mode(Colors.transparent, BlendMode.multiply)
+                : const ColorFilter.mode(Colors.transparent, BlendMode.saturation),
+            child: Image.asset(
+              'lib/assets/images/small-hive.png',
+              width: screenHeight * 0.028,
+              height: screenHeight * 0.028,
+            ),
           ),
         ),
         SizedBox(height: screenHeight * 0.005),
@@ -436,8 +473,8 @@ class _HomePageState extends State<HomePage> {
         provider.updateContent(content, title);
       },
       child: Container(
-        width: screenWidth * 0.25,
-        height: screenHeight * 0.085,
+        width: screenWidth * 0.26,
+        height: screenHeight * 0.09,
         decoration: BoxDecoration(
           gradient: isSelected
               ? const LinearGradient(

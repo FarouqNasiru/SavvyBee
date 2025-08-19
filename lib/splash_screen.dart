@@ -6,6 +6,7 @@ import 'package:savvybee/auth_screen.dart';
 import 'package:savvybee/home_page.dart';
 import 'package:savvybee/onboarding_screens.dart';
 import 'package:savvybee/utils/app_preferences.dart';
+import 'firebase_options.dart';
 
 
 class SplashScreen extends StatefulWidget {
@@ -23,21 +24,59 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> _initializeApp() async {
-    // Wait for minimum splash duration and Firebase initialization
-    await Future.wait([
-      Future.delayed(Duration(seconds: 2)),
-      Firebase.initializeApp(), // Initialize Firebase if not already done
-    ]);
+    try {
+      print('Starting app initialization...');
+      
+      // Wait for minimum splash duration
+      await Future.delayed(Duration(seconds: 2));
+      print('Splash delay completed');
+      
+      // Check if Firebase is already initialized
+      try {
+        if (Firebase.apps.isEmpty) {
+          print('Initializing Firebase...');
+          await Firebase.initializeApp(
+            options: DefaultFirebaseOptions.currentPlatform,
+          );
+          print('Firebase initialized successfully');
+        } else {
+          print('Firebase already initialized');
+        }
+      } catch (e) {
+        print('Firebase initialization failed: $e');
+        // Continue without Firebase for now
+      }
 
-    final isFirstLaunch = await AppPreferences.isFirstLaunch();
-    final isLoggedIn = await AppPreferences.isLoggedIn();
+      print('Checking app preferences...');
+      final isFirstLaunch = await AppPreferences.isFirstLaunch();
+      final isLoggedIn = await AppPreferences.isLoggedIn();
+      print('isFirstLaunch: $isFirstLaunch, isLoggedIn: $isLoggedIn');
 
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (_) => _getNextScreen(isFirstLaunch, isLoggedIn),
-      ),
-    );
+      if (mounted) {
+        print('Navigating to next screen...');
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (_) => _getNextScreen(isFirstLaunch, isLoggedIn),
+          ),
+        );
+      }
+    } catch (e) {
+      print('Error initializing app: $e');
+      // Even if Firebase fails, continue to the app
+      if (mounted) {
+        print('Continuing despite Firebase error...');
+        final isFirstLaunch = await AppPreferences.isFirstLaunch();
+        final isLoggedIn = await AppPreferences.isLoggedIn();
+        
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (_) => _getNextScreen(isFirstLaunch, isLoggedIn),
+          ),
+        );
+      }
+    }
   }
 
   Widget _getNextScreen(bool isFirstLaunch, bool isLoggedIn) {
@@ -57,9 +96,21 @@ class _SplashScreenState extends State<SplashScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SvgPicture.asset("lib/assets/images/Vector.svg"), // Replace with your logo asset
+            SvgPicture.asset(
+              "lib/assets/images/Vector.svg",
+              errorBuilder: (context, error, stackTrace) {
+                print('Error loading Vector.svg: $error');
+                return Icon(Icons.bug_report, size: 50, color: Colors.grey);
+              },
+            ),
             const SizedBox(height: 30),
-            Image.asset("lib/assets/images/SavvyBee.png"), // Replace with your logo asset
+            Image.asset(
+              "lib/assets/images/SavvyBee.png",
+              errorBuilder: (context, error, stackTrace) {
+                print('Error loading SavvyBee.png: $error');
+                return Icon(Icons.image, size: 50, color: Colors.grey);
+              },
+            ),
             const SizedBox(height: 20),
           ],
         ),

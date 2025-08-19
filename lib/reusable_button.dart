@@ -12,9 +12,11 @@ class ReusableButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final relativeHeight = 50 / screenHeight; // Relative height based on screen height
     return SizedBox(
       width: double.infinity, // Full width of the screen
-      height: 50, // Fixed height for the button
+      height: screenHeight * 0.06, // Fixed height for the button
       child: Container(
         decoration: BoxDecoration(
           border: const Border(

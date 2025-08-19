@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:savvybee/crreate_account_page.dart';
 import 'package:savvybee/home_page.dart';
 import 'package:savvybee/onboarding_screen10.dart';
@@ -57,134 +58,142 @@ class _LoginPageState extends State<LoginPage> {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: EdgeInsets.only(
-              top: screenHeight * 0.094, // ~60px on 812px height
-              left: screenWidth * 0.043, // ~16px on 375px width
-              right: screenWidth * 0.043,
-              bottom: screenHeight * 0.02,
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: EdgeInsets.only(
+                left: screenWidth * 0.043, // ~16px on 375px width
+                right: screenWidth * 0.043,
+                bottom: screenHeight * 0.071,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                    child: Image.asset(
+                      "lib/assets/images/bee_jar.png",
+                      width: 300,
+                      height: 300,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 18,
+                  ),
+                  Text(
+                    'Welcome Back, Bee! 🐝',
+                    style: TextStyle(
+                      fontSize: screenWidth * 0.064, // ~24px
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: screenHeight * 0.008), // ~8px
+                  Text(
+                    'Log in and keep building your hive of money skills.',
+                    style: GoogleFonts.manrope(
+                      fontSize: screenWidth * 0.043, // ~16px
+                      color: Colors.black,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  SizedBox(height: screenHeight * 0.025), // ~20px
+                  // Email Input Field
+                  Form(
+                    key: _form,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Email Address",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(height: screenHeight * 0.0086), // ~7px
+                        Container(
+                          decoration: BoxDecoration(
+                            border: Border(
+                              top: const BorderSide(color: Colors.grey, width: 1),
+                              left:
+                                  const BorderSide(color: Colors.grey, width: 1),
+                              right:
+                                  const BorderSide(color: Colors.grey, width: 3),
+                              bottom:
+                                  const BorderSide(color: Colors.grey, width: 3),
+                            ),
+                            borderRadius: BorderRadius.circular(
+                                screenWidth * 0.021), // ~8px
+                          ),
+                          child: TextFormField(
+                            decoration: InputDecoration(
+                              hintText: 'Enter valid email address',
+                              border: InputBorder.none,
+                              contentPadding: EdgeInsets.all(12),
+                            ),
+                            onChanged: (value) {
+                              setState(() {
+                                _enteredEmail = value;
+                              });
+                            },
+                          ),
+                        ),
+                        SizedBox(height: screenHeight * 0.025), // ~20px
+                        // Password Input Field
+                        Text(
+                          "Password",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(height: screenHeight * 0.0086), // ~7px
+                        Container(
+                          decoration: BoxDecoration(
+                            border: Border(
+                              top: const BorderSide(color: Colors.grey, width: 1),
+                              left:
+                                  const BorderSide(color: Colors.grey, width: 1),
+                              right:
+                                  const BorderSide(color: Colors.grey, width: 3),
+                              bottom:
+                                  const BorderSide(color: Colors.grey, width: 3),
+                            ),
+                            borderRadius: BorderRadius.circular(
+                                screenWidth * 0.021), // ~8px
+                          ),
+                          child: TextFormField(
+                            decoration: InputDecoration(
+                              hintText: 'Create Password',
+                              border: InputBorder.none,
+                              contentPadding: EdgeInsets.all(12),
+                            ),
+                            obscureText: true,
+                            onChanged: (value) {
+                              setState(() {
+                                _enteredPassword = value;
+                              });
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: screenHeight * 0.025), // ~20px
+                  // Log In Button
+                  ReusableButton(
+                    text: 'Log In',
+                    onPressed: _submit,
+                  ),
+                  SizedBox(height: screenHeight * 0.012), // ~10px
+                  Text(
+                    "Forgot Password?",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w200,
+                      color: Colors.grey,
+                      fontSize: screenWidth * 0.037, // ~14px
+                    ),
+                  ),
+                ],
+              ),
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Welcome Back, Bee! 🐝',
-                  style: TextStyle(
-                    fontSize: screenWidth * 0.064, // ~24px
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(height: screenHeight * 0.01), // ~8px
-                Text(
-                  'Log in and keep building your hive of money skills.',
-                  style: TextStyle(
-                    fontSize: screenWidth * 0.043, // ~16px
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(height: screenHeight * 0.025), // ~20px
-                // Email Input Field
-                Form(
-                  key: _form,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Email Address",
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(height: screenHeight * 0.0086), // ~7px
-                      Container(
-                        decoration: BoxDecoration(
-                          border: Border(
-                            top: const BorderSide(color: Colors.grey, width: 1),
-                            left:
-                                const BorderSide(color: Colors.grey, width: 1),
-                            right:
-                                const BorderSide(color: Colors.grey, width: 3),
-                            bottom:
-                                const BorderSide(color: Colors.grey, width: 3),
-                          ),
-                          borderRadius: BorderRadius.circular(
-                              screenWidth * 0.021), // ~8px
-                        ),
-                        child: TextFormField(
-                          decoration: InputDecoration(
-                            hintText: 'Enter valid email address',
-                            border: InputBorder.none,
-                            contentPadding: EdgeInsets.all(12),
-                          ),
-                          onChanged: (value) {
-                            setState(() {
-                              _enteredEmail = value;
-                            });
-                          },
-                        ),
-                      ),
-                      SizedBox(height: screenHeight * 0.025), // ~20px
-                      // Password Input Field
-                      Text(
-                        "Password",
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(height: screenHeight * 0.0086), // ~7px
-                      Container(
-                        decoration: BoxDecoration(
-                          border: Border(
-                            top: const BorderSide(color: Colors.grey, width: 1),
-                            left:
-                                const BorderSide(color: Colors.grey, width: 1),
-                            right:
-                                const BorderSide(color: Colors.grey, width: 3),
-                            bottom:
-                                const BorderSide(color: Colors.grey, width: 3),
-                          ),
-                          borderRadius: BorderRadius.circular(
-                              screenWidth * 0.021), // ~8px
-                        ),
-                        child: TextFormField(
-                          decoration: InputDecoration(
-                            hintText: 'Create Password',
-                            border: InputBorder.none,
-                            contentPadding: EdgeInsets.all(12),
-                          ),
-                          obscureText: true,
-                          onChanged: (value) {
-                            setState(() {
-                              _enteredPassword = value;
-                            });
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(height: screenHeight * 0.025), // ~20px
-                // Log In Button
-                ReusableButton(
-                  text: 'Log in',
-                  onPressed: _submit,
-                ),
-                SizedBox(height: screenHeight * 0.012), // ~10px
-                Text(
-                  "Forgot Password?",
-                  style: TextStyle(
-                    fontWeight: FontWeight.w200,
-                    color: Colors.grey,
-                    fontSize: screenWidth * 0.037, // ~14px
-                  ),
-                ),
-              ],
-            ),
-          ),
-          // Text at the bottom
-          Padding(
-            padding: EdgeInsets.only(bottom: screenHeight * 0.086), // ~70px
-            child: Center(
+            // Text at the bottom
+            Center(
               child: TextButton(
                 onPressed: () {
                   Navigator.push(
@@ -203,8 +212,8 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

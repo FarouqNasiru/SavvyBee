@@ -80,7 +80,7 @@ class _CrreateAccountPageState extends State<CrreateAccountPage> {
         children: [
           Padding(
             padding: EdgeInsets.only(
-                top: screenHeight * 0.08, // ~60px on 812px height
+                top: screenHeight * 0.12, // ~60px on 812px height
                 left: screenWidth * 0.04, // ~16px on 375px width
                 right: screenWidth * 0.04,
                 bottom: screenHeight * 0.02),

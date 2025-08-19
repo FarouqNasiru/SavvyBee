@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:savvybee/home_page.dart';
 import 'package:savvybee/nin_input_page.dart';
+import 'package:savvybee/onboarding_data_provider.dart';
 import 'country_provider.dart';
 
 class CountrySelectorPage extends StatelessWidget {
@@ -96,6 +97,7 @@ class CountrySelectorPage extends StatelessWidget {
 
   Widget _buildCountrySelector(BuildContext context) {
     final countryProvider = Provider.of<CountryProvider>(context);
+    final onboardingProvider = Provider.of<OnboardingDataProvider>(context, listen: false);
     final selectedCountry = countryProvider.selectedCountry;
     final hasSelected = countryProvider.hasSelectedCountry;
 
@@ -159,6 +161,7 @@ class CountrySelectorPage extends StatelessWidget {
         onChanged: (Country? newValue) {
           if (newValue != null) {
             countryProvider.setCountry(newValue);
+             onboardingProvider.updateResidenceCountry(newValue.name); // <-- Save to onboarding provider
           }
         },
       ),

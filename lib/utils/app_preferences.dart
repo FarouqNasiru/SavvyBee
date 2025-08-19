@@ -17,6 +17,11 @@ class AppPreferences {
   }
 
   static Future<bool> isLoggedIn() async {
-    return FirebaseAuth.instance.currentUser != null;
+    try {
+      return FirebaseAuth.instance.currentUser != null;
+    } catch (e) {
+      print('Error checking login status: $e');
+      return false;
+    }
   }
 }

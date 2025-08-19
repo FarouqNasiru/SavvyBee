@@ -9,13 +9,14 @@ plugins {
 }
 
 android {
-    namespace = "com.example.savvybee"
+    namespace = "com.example.savvybee" // <-- Use your actual package name
     compileSdkVersion 35
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
+        coreLibraryDesugaringEnabled true // <-- Add this line
     }
 
     kotlinOptions {
@@ -27,8 +28,8 @@ android {
         applicationId = "com.example.savvybee"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdk = flutter.minSdkVersion
-        targetSdkVersion 35
+        minSdk = 23
+        targetSdkVersion 34
         versionCode = flutter.versionCode
         versionName = flutter.versionName
     }
@@ -44,4 +45,15 @@ android {
 
 flutter {
     source = "../.."
+}
+
+dependencies {
+    // ...existing dependencies...
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.4'
+     // Import the BoM for the Firebase platform
+    implementation(platform("com.google.firebase:firebase-bom:34.0.0"))
+
+    // Add the dependency for the Firebase Authentication library
+    // When using the BoM, you don't specify versions in Firebase library dependencies
+    implementation("com.google.firebase:firebase-auth")
 }

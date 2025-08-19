@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:savvybee/home_page.dart';
 import 'package:savvybee/icon_grid.dart';
 import 'package:savvybee/navbar.dart';
 import 'package:savvybee/level_card.dart';
@@ -34,7 +35,16 @@ class BudgetingPage extends StatelessWidget {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
-         centerTitle: true,
+        centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () {
+           Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => HomePage()),
+            );
+          },
+        ),
         title: Text(
           title,
           textAlign: TextAlign.center,
@@ -204,7 +214,7 @@ class BudgetingPage extends StatelessWidget {
                     category: category,
                     level: levelIndex,
                   ),
-                  const SizedBox(height: 42),
+                  const SizedBox(height: 36),
                   IconGrid(
                     category: category,
                     level: levelIndex,
@@ -216,7 +226,7 @@ class BudgetingPage extends StatelessWidget {
                     completedLevel: completedLevel,
                     completedStage: completedStage,
                   ),
-                  const SizedBox(height: 42),
+                  const SizedBox(height: 48),
                 ],
               ),
             ),

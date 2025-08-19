@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:savvybee/navbar.dart';
-import 'package:savvybee/quiz_page.dart';
+import 'package:savvybee/data/budgeting_conent.dart';
 import 'package:savvybee/reusable_button.dart';
-import 'package:savvybee/text_dropdown.dart';
-import 'package:savvybee/bullet_point_list.dart';
+import '../widgets/flexible_content_widget.dart';
+import 'quiz_page.dart';
+import 'navbar.dart';
 
-class ReadingScreen extends StatelessWidget {
-  final List<String> readingTexts;
-  final List<Map<String, String>> dropdownData;
-  final List<String> bulletPoints;
+class FlexibleReadingScreen extends StatelessWidget {
   final String? category;
   final int? level;
   final int? stage;
@@ -18,12 +16,10 @@ class ReadingScreen extends StatelessWidget {
   final int levels;
   final int games;
   final int coins;
+  final String stageKey;
 
-  const ReadingScreen({
+  const FlexibleReadingScreen({
     super.key,
-    required this.readingTexts,
-    required this.dropdownData,
-    required this.bulletPoints,
     this.category,
     this.level,
     this.stage,
@@ -32,14 +28,27 @@ class ReadingScreen extends StatelessWidget {
     required this.levels,
     required this.games,
     required this.coins,
+    required this.stageKey,
   });
 
   @override
   Widget build(BuildContext context) {
+    // Set status bar to white with dark icons
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarColor: Colors.white, // Status bar background color
+        statusBarIconBrightness: Brightness.dark, // For Android - black icons
+        statusBarBrightness: Brightness.light, // For iOS - black icons
+      ),
+    );
+
     final Size screenSize = MediaQuery.of(context).size;
     final double screenWidth = screenSize.width;
     final double screenHeight = screenSize.height;
     final String displayCategory = category ?? "Budgeting";
+
+    // Get content from the new flexible structure
+    final content = BudgetingContent.getContent(stageKey, level ?? 0, displayCategory);
 
     return SafeArea(
       child: Scaffold(
@@ -51,7 +60,7 @@ class ReadingScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                "Reading about $category",
+                "Reading about $displayCategory",
                 style: GoogleFonts.manrope(
                   fontWeight: FontWeight.w400,
                   fontSize: 16,
@@ -61,105 +70,84 @@ class ReadingScreen extends StatelessWidget {
             ],
           ),
         ),
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.all(screenWidth * 0.05), // ~5% of screen width
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Card texts
-                if (readingTexts.isNotEmpty)
-                  Padding(
-                    padding:
-                        EdgeInsets.symmetric(vertical: screenHeight * 0.012),
-                    child: Text(
-                      readingTexts[0],
-                      style: GoogleFonts.manrope(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
+        body: Column(
+          children: [
+            // Content area that takes available space
+            Expanded(
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: EdgeInsets.all(screenWidth * 0.05),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (content != null)
+                        FlexibleContentWidget(sections: content.readingSections)
+                      else
+                        _buildFallbackContent(),
+                    ],
                   ),
-                if (readingTexts.length > 1)
-                  Padding(
-                    padding:
-                        EdgeInsets.symmetric(vertical: screenHeight * 0.012),
-                    child: Text(
-                      readingTexts[1],
-                      style: GoogleFonts.manrope(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w400,
-                      ),
-                      textAlign: TextAlign.start,
-                    ),
-                  ),
-                if (readingTexts.length > 2)
-                  Padding(
-                    padding:
-                        EdgeInsets.symmetric(vertical: screenHeight * 0.012),
-                    child: Text(
-                      readingTexts[2],
-                      style: GoogleFonts.manrope(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                      ),
-                      textAlign: TextAlign.start,
-                    ),
-                  ),
-                SizedBox(
-                    height: screenHeight * 0.025), // ~2.5% of screen height
-                // Dropdowns
-                ...dropdownData.map((dropdown) => Padding(
-                      padding:
-                          EdgeInsets.symmetric(vertical: screenHeight * 0.012),
-                      child: TextDropdown(
-                        headerText: dropdown['header'] ?? '',
-                        dropdownText: dropdown['body'] ?? '',
-                        backgroundColor: const Color(0xFFFAFAFA),
-                        textColor: Colors.black,
-                      ),
-                    )),
-                SizedBox(height: screenHeight * 0.025),
-                // Bullet points
-                if (bulletPoints.isNotEmpty)
-                  BulletPointList(points: bulletPoints),
-                SizedBox(
-                    height: screenHeight * 0.075), // ~7.5% of screen height
-                ReusableButton(
-                  text: "Take the Quiz",
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => QuizPage(
-                          category: displayCategory,
-                          level: level ?? 0,
-                          stage: stage ?? 0,
-                          title: title,
-                          description: description,
-                          levels: levels,
-                          games: games,
-                          coins: coins,
-                        ),
-                      ),
-                    );
-                  },
                 ),
-              ],
+              ),
             ),
-          ),
+            // Button area that stays at bottom
+            Container(
+              width: double.infinity,
+              padding: EdgeInsets.all(screenWidth * 0.05),
+              child: ReusableButton(
+                text: "Take the Quiz",
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => QuizPage(
+                        category: displayCategory,
+                        level: level ?? 0,
+                        stage: stage ?? 0,
+                        title: title,
+                        description: description,
+                        levels: levels,
+                        games: games,
+                        coins: coins,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
         ),
         bottomNavigationBar: const Navbar(),
       ),
     );
   }
 
+  Widget _buildFallbackContent() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Content not available',
+          style: GoogleFonts.manrope(
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        const SizedBox(height: 16),
+        Text(
+          'This content is being prepared. Please check back later.',
+          style: GoogleFonts.manrope(
+            fontSize: 14,
+            fontWeight: FontWeight.w400,
+          ),
+        ),
+      ],
+    );
+  }
+
   Widget _buildAppBarIconStack(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
-    final double iconContainerWidth = screenWidth * 0.1; // ~10% of screen width
-    final double iconContainerHeight =
-        iconContainerWidth * 1.28; // Maintain aspect ratio
+    final double iconContainerWidth = screenWidth * 0.1;
+    final double iconContainerHeight = iconContainerWidth * 1.28;
 
     return SizedBox(
       width: iconContainerWidth,
@@ -168,32 +156,31 @@ class ReadingScreen extends StatelessWidget {
         alignment: Alignment.center,
         children: [
           Positioned(
-            top: iconContainerHeight * 0.052, // ~5.2% of container height
+            top: iconContainerHeight * 0.052,
             child: Image.asset(
               'lib/assets/images/Rectangle 4.png',
-              width: iconContainerWidth * 0.7, // 70% of container width
-              height: iconContainerHeight * 0.845, // 84.5% of container height
+              width: iconContainerWidth * 0.7,
+              height: iconContainerHeight * 0.845,
               fit: BoxFit.contain,
             ),
           ),
           Positioned(
-            top: iconContainerHeight * 0.004, // ~0.4% of container height
-            left: iconContainerWidth * 0.158, // ~15.8% of container width
+            top: iconContainerHeight * 0.004,
+            left: iconContainerWidth * 0.158,
             child: Image.asset(
               'lib/assets/images/Rectangle 3.png',
-              width: iconContainerWidth * 0.81, // 81% of container width
-              height: iconContainerHeight * 0.99, // 99% of container height
+              width: iconContainerWidth * 0.81,
+              height: iconContainerHeight * 0.99,
               fit: BoxFit.contain,
             ),
           ),
           Positioned(
-            top: iconContainerHeight * 0.206, // ~20.6% of container height
-            left: iconContainerWidth * 0.264, // ~26.4% of container width
+            top: iconContainerHeight * 0.206,
+            left: iconContainerWidth * 0.264,
             child: Image.asset(
               'lib/assets/images/cbi_hive.png',
-              width: iconContainerWidth * 0.634, // 63.4% of container width
-              height:
-                  iconContainerWidth * 0.634, // Same as width for square aspect
+              width: iconContainerWidth * 0.634,
+              height: iconContainerWidth * 0.634,
               fit: BoxFit.contain,
             ),
           ),

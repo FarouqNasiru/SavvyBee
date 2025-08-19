@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:savvybee/country_selector_page.dart';
 import 'package:savvybee/home_page.dart';
+import 'package:savvybee/onboarding_data_provider.dart';
 import 'date_of_birth_provider.dart';
 
 class DateOfBirthPage extends StatelessWidget {
@@ -96,6 +97,7 @@ class DateOfBirthPage extends StatelessWidget {
 
   Widget _buildDateInputFields(BuildContext context) {
     final dobProvider = Provider.of<DateOfBirthProvider>(context);
+     final onboardingData = Provider.of<OnboardingDataProvider>(context, listen: false);
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,

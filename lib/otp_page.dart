@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:savvybee/auth_code_provider.dart';
 import 'package:savvybee/date_of_birth_page.dart';
 import 'package:savvybee/home_page.dart';
+import 'package:savvybee/phone_number_provider.dart';
 
 class AuthCodePage extends StatelessWidget {
   @override
@@ -10,6 +11,7 @@ class AuthCodePage extends StatelessWidget {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
     final authProvider = Provider.of<AuthCodeProvider>(context);
+    final phoneProvider = Provider.of<PhoneNumberProvider>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -82,15 +84,50 @@ class AuthCodePage extends StatelessWidget {
               ],
             ),
 
+            // Error message display
+            if (authProvider.errorMessage != null)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                child: Container(
+                  padding: const EdgeInsets.all(12.0),
+                  decoration: BoxDecoration(
+                    color: Colors.red[50],
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: Colors.red[200]!),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(Icons.error_outline, color: Colors.red[600], size: 20),
+                      SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          authProvider.errorMessage!,
+                          style: TextStyle(
+                            color: Colors.red[700],
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.close, color: Colors.red[600], size: 20),
+                        onPressed: () => authProvider.clearError(),
+                        padding: EdgeInsets.zero,
+                        constraints: BoxConstraints(),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
             // Code Input Fields
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: List.generate(5, (index) {
+              children: List.generate(6, (index) { // Changed to 6 digits for Firebase
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 2.8),
                   child: Container(
-                    width: 60,
-                    height: 60,
+                    width: 50, // Slightly smaller for 6 digits
+                    height: 50,
                     decoration: BoxDecoration(
                       border: Border(
                         top: BorderSide(
@@ -122,7 +159,7 @@ class AuthCodePage extends StatelessWidget {
                       maxLength: 1,
                       textAlign: TextAlign.center,
                       keyboardType: TextInputType.number,
-                      style: const TextStyle(fontSize: 24),
+                      style: const TextStyle(fontSize: 20),
                       decoration: const InputDecoration(
                         counterText: '',
                         border: InputBorder.none,
@@ -162,14 +199,21 @@ class AuthCodePage extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: ElevatedButton(
-                  onPressed: authProvider.isValid
-                      ? () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => DateOfBirthPage(),
-                            ),
-                          );
+                  onPressed: (authProvider.isValid && !authProvider.isLoading)
+                      ? () async {
+                          if (phoneProvider.verificationId != null) {
+                            final success = await authProvider.verifyOTP(
+                              phoneProvider.verificationId!,
+                            );
+                            if (success && context.mounted) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => DateOfBirthPage(),
+                                ),
+                              );
+                            }
+                          }
                         }
                       : null,
                   style: ElevatedButton.styleFrom(
@@ -181,12 +225,21 @@ class AuthCodePage extends StatelessWidget {
                     ),
                     elevation: 2,
                   ),
-                  child: const Text(
-                    "Continue",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  child: authProvider.isLoading
+                      ? SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
+                          ),
+                        )
+                      : const Text(
+                          "Continue",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                 ),
               ),
             ),

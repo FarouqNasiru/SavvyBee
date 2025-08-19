@@ -67,6 +67,13 @@ class QuizPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Set status bar to black icons
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: Brightness.dark, // Black icons for Android
+      statusBarBrightness: Brightness.light,    // Black icons for iOS
+    ));
+
     return ChangeNotifierProvider(
       create: (context) => QuizProvider(
         category: category,
@@ -158,24 +165,7 @@ class QuizPage extends StatelessWidget {
                 Spacer(),
                 Column(
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset(
-                            "lib/assets/images/fluent-color_coin-multiple-16.png"),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Text(
-                          "+500 Coins",
-                          style: GoogleFonts.manrope(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
-                            color: Color(0xFF000000),
-                          ),
-                        ),
-                      ],
-                    ),
+                    _buildAnimatedCoinReward(),
                     SizedBox(
                       height: 52,
                     ),
@@ -259,6 +249,116 @@ class QuizPage extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildAnimatedCoinReward() {
+    return TweenAnimationBuilder<double>(
+      duration: const Duration(milliseconds: 2000),
+      tween: Tween(begin: 0.0, end: 1.0),
+      builder: (context, value, child) {
+        // Phase 1 (0-0.2): Drop down fast from top center
+        if (value < 0.2) {
+          final dropProgress = value / 0.2;
+          final scale = 4.0 + (dropProgress * 1.0); // Scale from 4x to 5x
+          final offsetY = -200 + (dropProgress * 200); // Drop from -200 to 0
+          
+          return Transform.translate(
+            offset: Offset(0, offsetY),
+            child: Transform.scale(
+              scale: scale,
+              child: Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Image.asset(
+                      "lib/assets/images/fluent-color_coin-multiple-16.png",
+                      width: 40,
+                      height: 40,
+                    ),
+                    SizedBox(width: 12),
+                    Text(
+                      "+500 Coins",
+                      style: GoogleFonts.manrope(
+                        fontSize: 32,
+                        fontWeight: FontWeight.w700,
+                        color: Color(0xFF000000),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        }
+        
+        // Phase 2 (0.2-0.4): Shake effect while big
+        if (value < 0.4) {
+          final shakeProgress = (value - 0.2) / 0.2;
+          final shakeOffset = 10 * (1 - shakeProgress) * (shakeProgress % 0.1 > 0.05 ? 1 : -1);
+          final scale = 5.0;
+          
+          return Transform.translate(
+            offset: Offset(shakeOffset, 0),
+            child: Transform.scale(
+              scale: scale,
+              child: Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Image.asset(
+                      "lib/assets/images/fluent-color_coin-multiple-16.png",
+                      width: 40,
+                      height: 40,
+                    ),
+                    SizedBox(width: 12),
+                    Text(
+                      "+500 Coins",
+                      style: GoogleFonts.manrope(
+                        fontSize: 32,
+                        fontWeight: FontWeight.w700,
+                        color: Color(0xFF000000),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        }
+        
+        // Phase 3 (0.4-1.0): Animate to final position with size reduction
+        final progress = (value - 0.4) / 0.6; // Normalize to 0-1
+        final scale = 5.0 - (progress * 4.0); // Scale from 5x to 1x
+        final fontSize = 32.0 - (progress * 16.0); // Font size from 32 to 16
+        final imageSize = 40.0 - (progress * 24.0); // Image size from 40 to 16
+        final spacing = 12.0 - (progress * 7.0); // Spacing from 12 to 5
+        
+        return Transform.scale(
+          scale: scale,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(
+                "lib/assets/images/fluent-color_coin-multiple-16.png",
+                width: imageSize,
+                height: imageSize,
+              ),
+              SizedBox(width: spacing),
+              Text(
+                "+500 Coins",
+                style: GoogleFonts.manrope(
+                  fontSize: fontSize,
+                  fontWeight: FontWeight.w700,
+                  color: Color(0xFF000000),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

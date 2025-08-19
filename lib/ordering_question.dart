@@ -110,16 +110,22 @@ class _OrderingQuestionState extends State<OrderingQuestion> {
                     // Orderable items
                     Expanded(
                       child: ReorderableListView(
+                        buildDefaultDragHandles: false, // <-- Add this line
                         padding: EdgeInsets.zero,
                         onReorder: (oldIndex, newIndex) {
                           provider.swapOrderItems(oldIndex, newIndex);
+                        },
+                        proxyDecorator: (child, index, animation) {
+                          return Opacity(
+                            opacity: 0.0,
+                            child: child,
+                          );
                         },
                         children: [
                           for (int i = 0; i < provider.currentOrder.length; i++)
                             _buildOrderItem(
                               context,
-                              text: question
-                                  .orderingItems![provider.currentOrder[i]],
+                              text: question.orderingItems![provider.currentOrder[i]],
                               index: i,
                               isSmallScreen: isSmallScreen,
                             ),
@@ -289,21 +295,24 @@ class _OrderingQuestionState extends State<OrderingQuestion> {
         children: [
           Padding(
             padding: const EdgeInsets.only(left: 12.0),
-            child: Image.asset(
-              "lib/assets/images/hamburger.png",
-              width: 18,
-              height: 12,
+            child: ReorderableDragStartListener(
+              index: index,
+              child: Image.asset(
+                "lib/assets/images/hamburger.png",
+                width: 18,
+                height: 12,
+              ),
             ),
           ),
-          SizedBox(
-            width: 16,
-          ),
-          Text(
-            text,
-            style: TextStyle(
-              fontSize: isSmallScreen ? 12 : 14,
-              fontWeight: FontWeight.w400,
-              color: Colors.black,
+          SizedBox(width: 16),
+          Expanded(
+            child: Text(
+              text,
+              style: TextStyle(
+                fontSize: isSmallScreen ? 12 : 14,
+                fontWeight: FontWeight.w400,
+                color: Colors.black,
+              ),
             ),
           ),
         ],
@@ -320,6 +329,7 @@ class _OrderingQuestionState extends State<OrderingQuestion> {
     return Container(
       margin: EdgeInsets.only(bottom: isSmallScreen ? 20 : 40),
       width: double.infinity,
+      height: 50,
       decoration: BoxDecoration(
         color: Colors.white, // Background to ensure it's opaque
       ),

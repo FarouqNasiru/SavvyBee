@@ -169,11 +169,12 @@ class MultipleChoiceQuestion extends StatelessWidget {
       if (!showFeedback) {
         return isSelected ? const Color(0xFFFFC300) : const Color(0xFFF5F5F5);
       } else {
-        if (isCorrectAnswer) {
-          return const Color(0xFF37BA2B); // Green for correct
-        } else if (wasSelected && !isCorrectAnswer) {
+        if (wasSelected && !isCorrectAnswer) {
           return const Color(0xFFFF3B30); // Red for wrong selected
+        } else if (wasSelected && isCorrectAnswer) {
+          return const Color(0xFF37BA2B); // Green for correct selected
         }
+        // Do NOT highlight the correct answer if not selected
         return const Color(0xFFF5F5F5); // Default for others
       }
     }
@@ -182,9 +183,10 @@ class MultipleChoiceQuestion extends StatelessWidget {
       onTap: onTap,
       child: Container(
         width: double.infinity,
+        height: isSmallScreen ? 52 : 60, // Fixed height for option
         margin: EdgeInsets.only(bottom: isSmallScreen ? 12 : 16),
         padding: EdgeInsets.symmetric(
-          vertical: isSmallScreen ? 14 : 18,
+          vertical: 0, // Remove vertical padding to fit text
           horizontal: 16,
         ),
         decoration: BoxDecoration(
@@ -202,6 +204,7 @@ class MultipleChoiceQuestion extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
         ),
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Image.asset(
               "lib/assets/images/Ellipse 1.png",
@@ -209,13 +212,17 @@ class MultipleChoiceQuestion extends StatelessWidget {
               height: 16,
             ),
             const SizedBox(width: 8),
-            Text(
-              text,
-              textAlign: TextAlign.start,
-              style: TextStyle(
-                fontSize: isSmallScreen ? 14 : 16,
-                fontWeight: FontWeight.w400,
-                color: Colors.black,
+            Expanded(
+              child: Text(
+                text,
+                textAlign: TextAlign.start,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontSize: isSmallScreen ? 14 : 16,
+                  fontWeight: FontWeight.w400,
+                  color: Colors.black,
+                ),
               ),
             ),
           ],

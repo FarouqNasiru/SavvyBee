@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:savvybee/budgeting_page.dart';
-import 'package:savvybee/card_onboarding_screen.dart';
 import 'package:savvybee/navbar.dart';
 import 'package:savvybee/reading_screen.dart';
 import 'package:savvybee/reusable_button.dart';
+import 'package:savvybee/updated_card_onboarding_screen.dart';
 import 'package:savvybee/videos_screen.dart';
 
 class HomeScreenBudgeting extends StatelessWidget {
@@ -113,13 +112,12 @@ class HomeScreenBudgeting extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => CardOnboardingScreen(
+                      builder: (context) => UpdatedCardOnboardingScreen(
                         category: category,
                         level: level,
                         stageKey: stageKey,
                         title: title,
-                        description:
-                            description, // <-- pass correct description
+                        description: description,
                         levels: levels,
                         games: games,
                         coins: coins,
@@ -132,49 +130,57 @@ class HomeScreenBudgeting extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: Navbar(),
+      bottomNavigationBar: const Navbar(),
     );
   }
 
   Widget _buildNavigationCard(BuildContext context, String title,
       double screenHeight, double screenWidth) {
     return GestureDetector(
-      // ...inside your _buildCard or onTap handler...
       onTap: () {
         if (title == 'Highlights') {
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => CardOnboardingScreen(
-                      category: category,
-                      level: level,
-                      stageKey: stageKey,
-                      title: title,
-                      description: description, // <-- pass correct description
-                      levels: levels,
-                      games: games,
-                      coins: coins,
-                    )),
+              builder: (context) => UpdatedCardOnboardingScreen(
+                category: category,
+                level: level,
+                stageKey: stageKey,
+                title: this.title,
+                description: description,
+                levels: levels,
+                games: games,
+                coins: coins,
+              ),
+            ),
           );
         } else if (title == 'Reading') {
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => CardOnboardingScreen(
-                      category: category,
-                      level: level,
-                      stageKey: stageKey,
-                      title: title,
-                      description: description, // <-- pass correct description
-                      levels: levels,
-                      games: games,
-                      coins: coins,
-                    )),
+              builder: (context) => FlexibleReadingScreen(
+                category: category,
+                level: level,
+                stage: int.tryParse(stageKey.replaceAll(RegExp(r'[^0-9]'), '')) ?? 0,
+                title: this.title,
+                description: description,
+                levels: levels,
+                games: games,
+                coins: coins,
+                stageKey: stageKey,
+              ),
+            ),
           );
         } else if (title == 'Videos') {
+          // Pass both category and level to VideosScreen
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => VideosScreen()),
+            MaterialPageRoute(
+              builder: (context) => VideosScreen(
+                category: category,
+                level: level, // Pass the current level
+              ),
+            ),
           );
         }
       },

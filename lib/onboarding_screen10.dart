@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:savvybee/home_page.dart';
 import 'package:savvybee/onboarding_screen11.dart';
 import 'package:savvybee/reusable_button.dart';
@@ -10,10 +11,17 @@ class SavvyBeeOnboarding10 extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: Brightness.dark, // For Android - black icons
+      statusBarBrightness: Brightness.light,    // For iOS - black icons
+    ));
+
     // Dynamically calculate image height based on screen height
     final imageHeight = screenHeight * 0.5; // 50% of the screen height
 
     return Scaffold(
+      extendBodyBehindAppBar: true,
       backgroundColor: Colors.white,
       body: Column(
         children: [
@@ -71,8 +79,8 @@ class SavvyBeeOnboarding10 extends StatelessWidget {
                   ),
                 ),
                 Positioned(
-                  top: 10,
-                  left: 10,
+                  top: 40,
+                  left: 20,
                   child: GestureDetector(
                     onTap: () {
                       Navigator.of(context).pushReplacement(
@@ -81,8 +89,8 @@ class SavvyBeeOnboarding10 extends StatelessWidget {
                     },
                     child: Image.asset(
                       "lib/assets/images/solar_close-square-linear.png",
-                      width: 50,
-                      height: 50,
+                      width: 24,
+                      height: 24,
                     ),
                   ),
                 ),
