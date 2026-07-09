@@ -4,6 +4,8 @@ import 'package:savvybee/onboarding_screen10.dart';
 import 'package:savvybee/reusable_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:savvybee/google_auth_service.dart';
 
 final _firebase = FirebaseAuth.instance;
 final _firestore = FirebaseFirestore.instance;
@@ -25,26 +27,27 @@ class _CrreateAccountPageState extends State<CrreateAccountPage> {
 
     if (isValid) {
       _form.currentState!.save();
-    
+
       try {
         final userCredentials = await _firebase.createUserWithEmailAndPassword(
             email: _enteredEmail, password: _enteredPassword);
-       
+
         // 2. Save user data to Firestore (only first name)
-        await _firestore.collection('users').doc(userCredentials.user!.uid).set({
+        await _firestore
+            .collection('users')
+            .doc(userCredentials.user!.uid)
+            .set({
           'firstName': _enteredName, // Saving first name
           'email': _enteredEmail,
           'createdAt': FieldValue.serverTimestamp(),
           'points': 0, // Default points
-          'hearts': 0,   // Default hearts
+          'hearts': 0, // Default hearts
         });
 
         // 3. Navigate to onboarding
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (context) => SavvyBeeOnboarding10()),
         );
-
-
       } on FirebaseAuthException catch (error) {
         // Handle errors here, e.g., show a dialog or a snackbar
         if (error.code == 'email-already-in-use') {
@@ -240,8 +243,7 @@ class _CrreateAccountPageState extends State<CrreateAccountPage> {
                         ReusableButton(
                           text: 'Join the Hive!',
                           onPressed: _submit,
-                        ),
-                        SizedBox(height: screenHeight * 0.02), // ~16px
+                        ), // ~16px
                         Text(
                           'By signing up, you agree to our Terms of Service and Privacy Policy.',
                           style:

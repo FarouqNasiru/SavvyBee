@@ -35,6 +35,21 @@ class _WordMeaningQuestionState extends State<WordMeaningQuestion> {
       stepShowFeedback = true;
       stepIsCorrect = wordPairs[stepCurrentWord]['meaning'] == uniqueMeanings[stepSelectedMeaning!];
     });
+    
+    // Only call reward system if this is the last step and all pairs are correct
+    final provider = Provider.of<QuizProvider>(context, listen: false);
+    if (stepIsCorrect) {
+      // Check if this is the last step (all pairs completed)
+      if (stepCurrentWord == wordPairs.length - 1) {
+        // All pairs completed successfully - award rewards for the entire question
+        provider.handleCorrectAnswer();
+      }
+      // Don't award rewards for individual pairs in step-by-step mode
+    } else {
+      // Reset streak if wrong answer
+      provider.correctAnswersInRow = 0;
+      provider.showX2Multiplier = false;
+    }
   }
 
   void _handleStepNext(List<Map<String, String>> wordPairs) {
@@ -82,25 +97,47 @@ class _WordMeaningQuestionState extends State<WordMeaningQuestion> {
             ),
             child: Column(
               children: [
-                Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: IconButton(
-                        onPressed: () => Navigator.pop(context),
-                        icon: Icon(Icons.arrow_back, size: screenWidth * 0.07),
-                      ),
-                    ),
-                    Text(
-                      "Question ${provider.currentQuestionNumber}/${provider.totalQuestions}",
-                      style: GoogleFonts.manrope(
-                        fontSize: screenWidth * 0.045,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ],
-                ),
+                                 Row(
+                   children: [
+                     IconButton(
+                       onPressed: () => Navigator.pop(context),
+                       icon: Icon(Icons.arrow_back, size: screenWidth * 0.07),
+                     ),
+                     Expanded(
+                       child: Center(
+                         child: Text(
+                           "Question ${provider.currentQuestionNumber}/${provider.totalQuestions}",
+                           style: GoogleFonts.manrope(
+                             fontSize: screenWidth * 0.045,
+                             fontWeight: FontWeight.w700,
+                           ),
+                         ),
+                       ),
+                     ),
+                     // X2 Multiplier Display
+                     if (provider.showX2Multiplier)
+                       Container(
+                         width: 40,
+                         height: 40,
+                         decoration: BoxDecoration(
+                           color: Colors.black,
+                           shape: BoxShape.circle,
+                         ),
+                         child: Center(
+                           child: Text(
+                             "X2",
+                             style: GoogleFonts.manrope(
+                               fontSize: 16,
+                               fontWeight: FontWeight.w700,
+                               color: const Color(0xFFFFC300),
+                             ),
+                           ),
+                         ),
+                       )
+                     else
+                       const SizedBox(width: 40), // Placeholder to maintain layout
+                   ],
+                 ),
                 _buildProgressHeader(context),
                 SizedBox(height: screenHeight * 0.03),
                 Padding(
@@ -269,7 +306,7 @@ class _WordMeaningQuestionState extends State<WordMeaningQuestion> {
   }
 
   Widget _buildProgressHeader(BuildContext context) {
-    final provider = Provider.of<QuizProvider>(context, listen: false);
+    final provider = Provider.of<QuizProvider>(context, listen: true);
     final progress = provider.progress;
     final screenWidth = MediaQuery.of(context).size.width;
 

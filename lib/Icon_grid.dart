@@ -430,9 +430,9 @@ class IconGrid extends StatelessWidget {
       case 'budgeting':
         switch (level) {
           case 0:
-            imagePath = 'lib/assets/images/budgeting bee pose 1 5.png';
-            imageWidth = 180;
-            imageHeight = 245;
+            imagePath = 'lib/assets/images/budgeting 1.PNG';
+            imageWidth = 100;
+            imageHeight = 165;
             break;
           case 1:
             imagePath = 'lib/assets/images/budgeting bee pose 1 4.png';
@@ -441,14 +441,18 @@ class IconGrid extends StatelessWidget {
             break;
           case 2:
             imagePath = 'lib/assets/images/budgeting bee pose 1 5.png';
-            imageWidth = 180;
-            imageHeight = 245;
+            imageWidth = 185;
+            imageHeight = 255;
             break;
           case 3:
+            imagePath = 'lib/assets/images/budgeting 4.PNG';
+            imageWidth = 105;
+            imageHeight = 185;
+            break;
           case 4:
-            imagePath = 'lib/assets/images/budgeting bee pose 1 4.png';
-            imageWidth = 180;
-            imageHeight = 245;
+            imagePath = 'lib/assets/images/budgeting 5.PNG';
+            imageWidth = 105;
+            imageHeight = 185;
             break;
           default:
             imagePath = 'lib/assets/images/budgeting bee pose 1 4.png';
@@ -460,32 +464,32 @@ class IconGrid extends StatelessWidget {
       case 'savings':
         switch (level) {
           case 0:
-            imagePath = 'lib/assets/images/budgeting bee pose 1 6.png';
-            imageWidth = 165;
-            imageHeight = 240;
+            imagePath = 'lib/assets/images/budgeting 1.PNG';
+            imageWidth = 100;
+            imageHeight = 165;
             break;
           case 1:
-            imagePath = 'lib/assets/images/budgeting bee pose 1 7.png';
+            imagePath = 'lib/assets/images/budgeting bee pose 1 4.png';
            imageWidth = 165;
             imageHeight = 240;
             break;
           case 2:
-            imagePath = 'lib/assets/images/budgeting bee pose 1 8.png';
+            imagePath = 'lib/assets/images/budgeting bee pose 1 5.png';
             imageWidth = 165;
             imageHeight = 240;
             break;
           case 3:
-            imagePath = 'lib/assets/images/budgeting bee pose 1 3.png';
+            imagePath = 'lib/assets/images/budgeting 4.PNG';
             imageWidth = 140;
             imageHeight = 200;
             break;
           case 4:
-            imagePath = 'lib/assets/images/budgeting bee pose 1 2.png';
+            imagePath = 'lib/assets/images/budgeting 5.PNG';
             imageWidth = 140;
             imageHeight = 200;
             break;
           default:
-            imagePath = 'lib/assets/images/budgeting bee pose 1 8.png';
+            imagePath = 'lib/assets/images/budgeting bee pose 1 4.png';
             imageWidth = 140;
             imageHeight = 200;
         }

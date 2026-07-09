@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:savvybee/Hive_dashboard.dart';
 import 'package:savvybee/Hive_home_page.dart';
 import 'package:savvybee/dashboard_screen.dart';
+
+import 'package:savvybee/games_screen.dart';
 import 'package:savvybee/home_page.dart';
 import 'package:savvybee/screens/home/home_screen.dart';
+import 'package:savvybee/screens/premium_screen.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Navbar extends StatefulWidget {
@@ -56,17 +60,27 @@ class _NavbarState extends State<Navbar> {
             context,
             MaterialPageRoute(builder: (context) => HomePage()),
           );
-        }
-        else if (selectedLabel == 'Dashboard') {
+        } else if (selectedLabel == 'Games') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const GamesScreen()),
+          );
+        } else if (selectedLabel == 'Dashboard') {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => DashboardScreen()),
+          );
+        } else if (selectedLabel == 'Premium') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => PremiumScreen()),
           );
         }
         // Handle other destinations as needed
       },
       labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
-      labelTextStyle: MaterialStateProperty.resolveWith<TextStyle>((Set<MaterialState> states) {
+      labelTextStyle: MaterialStateProperty.resolveWith<TextStyle>(
+          (Set<MaterialState> states) {
         if (states.contains(MaterialState.selected)) {
           return const TextStyle(
             color: Colors.white,
@@ -92,7 +106,7 @@ class _NavbarState extends State<Navbar> {
         ),
         NavigationDestination(
           icon: Image.asset(
-            "lib/assets/images/solar_gamepad-linear.png",
+            "lib/assets/images/proicons_game.png",
             width: 24,
             height: 24,
             color: selectedIndex == 1 ? Colors.white : Colors.grey,

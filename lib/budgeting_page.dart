@@ -181,9 +181,9 @@ class BudgetingPage extends StatelessWidget {
                               ],
                             ),
                           ),
-                          // Foreground image (budgeting bee pose 3 2.png)
+                          // Foreground image (dynamic based on category)
                           Image.asset(
-                            "lib/assets/images/budgeting bee pose 3 2.png",
+                            _getImageForCategory(category),
                             width: 80,
                             height: 140,
                             fit: BoxFit.contain,
@@ -248,5 +248,18 @@ class BudgetingPage extends StatelessWidget {
       ),
       bottomNavigationBar: Navbar(),
     );
+  }
+
+  String _getImageForCategory(String category) {
+    switch (category) {
+      case 'Budgeting':
+        return 'lib/assets/images/budgeting bee pose 3 2.png';
+      case 'Savings':
+        return 'lib/assets/images/savings bee pose lg.PNG';
+      case 'Numeracy':
+        return 'lib/assets/images/numeracy_bee_lg.PNG';
+      default:
+        return 'lib/assets/images/budgeting bee pose 3 2.png';
+    }
   }
 }

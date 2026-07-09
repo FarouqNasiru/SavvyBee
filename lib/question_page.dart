@@ -6,8 +6,55 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'onboarding_data_provider.dart';
 
-class QuestionPage extends StatelessWidget {
+class QuestionPage extends StatefulWidget {
   const QuestionPage({super.key});
+
+  @override
+  State<QuestionPage> createState() => _QuestionPageState();
+}
+
+class _QuestionPageState extends State<QuestionPage> with TickerProviderStateMixin {
+  late AnimationController _animationController;
+  late Animation<double> _fadeAnimation;
+  late Animation<Offset> _slideAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      duration: const Duration(milliseconds: 1200),
+      vsync: this,
+    );
+    
+    _fadeAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeInOut,
+    ));
+    
+    _slideAnimation = Tween<Offset>(
+      begin: const Offset(0, 0.3),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeOutCubic,
+    ));
+    
+    _animationController.forward();
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  void _triggerAnimation() {
+    _animationController.reset();
+    _animationController.forward();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +119,13 @@ class QuestionPage extends StatelessWidget {
                     // Question and options (in Expanded to handle small screens)
                     Expanded(
                       child: SingleChildScrollView(
-                        child: _buildQuestionSection(context),
+                        child: SlideTransition(
+                          position: _slideAnimation,
+                          child: FadeTransition(
+                            opacity: _fadeAnimation,
+                            child: _buildQuestionSection(context),
+                          ),
+                        ),
                       ),
                     ),
                     // Continue button
@@ -129,24 +182,102 @@ class QuestionPage extends StatelessWidget {
           ],
         ),
         SizedBox(height: screenHeight * 0.03),
-        // Options
+        // Options with staggered animations
         Column(
           children: List.generate(
             question.options.length,
-            (index) => _buildOption(context,
-                text: question.options[index],
-                isSelected: question.selectedIndex == index, onTap: () {
-              provider.selectOption(index);
-              final onboardingProvider =
-                  Provider.of<OnboardingDataProvider>(context, listen: false);
-              onboardingProvider.addQuestionAnswer(
-                question.text,
-                question.options[index],
-              );
-            }),
+            (index) => _buildAnimatedOption(
+              context,
+              text: question.options[index],
+              isSelected: question.selectedIndex == index,
+              index: index,
+              onTap: () {
+                provider.selectOption(index);
+                final onboardingProvider =
+                    Provider.of<OnboardingDataProvider>(context, listen: false);
+                onboardingProvider.addQuestionAnswer(
+                  question.text,
+                  question.options[index],
+                );
+              },
+            ),
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildAnimatedOption(
+    BuildContext context, {
+    required String text,
+    required bool isSelected,
+    required int index,
+    required VoidCallback onTap,
+  }) {
+    final screenSize = MediaQuery.of(context).size;
+    final screenHeight = screenSize.height;
+    final screenWidth = screenSize.width;
+
+    // Create staggered animation for each option
+    final staggeredAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: Interval(
+        (index * 0.15).clamp(0.0, 0.75), // Stagger the animations with more delay
+        ((index + 1) * 0.15).clamp(0.15, 1.0),
+        curve: Curves.easeOutCubic,
+      ),
+    ));
+
+    final slideAnimation = Tween<Offset>(
+      begin: const Offset(0, 0.4),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: Interval(
+        (index * 0.15).clamp(0.0, 0.75),
+        ((index + 1) * 0.15).clamp(0.15, 1.0),
+        curve: Curves.easeOutCubic,
+      ),
+    ));
+
+    return SlideTransition(
+      position: slideAnimation,
+      child: FadeTransition(
+        opacity: staggeredAnimation,
+        child: GestureDetector(
+          onTap: onTap,
+          child: Container(
+            width: double.infinity,
+            margin: EdgeInsets.only(bottom: screenHeight * 0.015),
+            padding: EdgeInsets.symmetric(
+              vertical: screenHeight * 0.02,
+              horizontal: screenWidth * 0.01,
+            ),
+            decoration: BoxDecoration(
+              color: isSelected ? Colors.yellow[700] : Colors.white,
+              border: const Border(
+                top: BorderSide(color: Colors.black, width: 1),
+                left: BorderSide(color: Colors.black, width: 1),
+                right: BorderSide(color: Colors.black, width: 3),
+                bottom: BorderSide(color: Colors.black, width: 3),
+              ),
+              borderRadius: BorderRadius.circular(screenWidth * 0.02),
+            ),
+            child: Text(
+              text,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: screenWidth * 0.035,
+                fontWeight: FontWeight.w400,
+                color: Colors.black,
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 
@@ -222,6 +353,8 @@ class QuestionPage extends StatelessWidget {
                   if (provider.currentQuestionIndex <
                       provider.questions.length - 1) {
                     provider.nextQuestion();
+                    // Trigger animation for next question
+                    _triggerAnimation();
                   } else {
                     // Submit all answers
                     print("All questions answered!");

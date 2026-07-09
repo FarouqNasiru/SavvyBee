@@ -9,6 +9,8 @@ import 'package:savvybee/reusable_button.dart';
 import 'package:savvybee/screens/create_hive_screen.dart';
 import 'package:savvybee/screens/hive/create_hive_screen.dart';
 import 'package:savvybee/screens/hive/hive_creation_success_screen.dart';
+import 'package:savvybee/onboarding_screen10.dart';
+import 'package:savvybee/bvn_input_page.dart';
 import 'question_page.dart';
 // import your identity verification page here
 // import 'identity_verification_page.dart';
@@ -148,12 +150,14 @@ class _HiveCreationRequirementState extends State<HiveCreationRequirement> {
                         actionLabel: "Verify identity",
                         onAction: () {
                           if (!identityVerified) {
-                            // Replace with your actual identity verification page
+                            // Set flag to indicate user came from hive creation
+                            BvnInputPage.setFromHiveCreation(true);
+                            // Navigate to onboarding screen 10 to start identity verification flow
                             Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                         builder: (_) =>
-                                            IdentityVerificationPage()))
+                                            SavvyBeeOnboarding10()))
                                 .then((_) => _fetchCompletionStatus());
                           }
                         },

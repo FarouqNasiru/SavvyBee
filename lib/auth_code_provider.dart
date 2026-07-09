@@ -30,22 +30,13 @@ class AuthCodeProvider extends ChangeNotifier {
     _errorMessage = null;
     notifyListeners();
 
-    try {
-      PhoneAuthCredential credential = PhoneAuthProvider.credential(
-        verificationId: verificationId,
-        smsCode: otpCode,
-      );
-
-      await FirebaseAuth.instance.signInWithCredential(credential);
-      _isLoading = false;
-      notifyListeners();
-      return true;
-    } catch (e) {
-      _isLoading = false;
-      _errorMessage = 'Invalid verification code';
-      notifyListeners();
-      return false;
-    }
+    // Simulate loading for 1 second
+    await Future.delayed(const Duration(seconds: 1));
+    
+    // Skip Firebase verification and simulate success
+    _isLoading = false;
+    notifyListeners();
+    return true;
   }
 
   void clearError() {

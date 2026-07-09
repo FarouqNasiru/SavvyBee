@@ -4,10 +4,20 @@ import 'package:savvybee/home_page.dart';
 import 'package:savvybee/onboarding_data_provider.dart';
 import 'package:savvybee/onboarding_screens.dart';
 import 'package:savvybee/question_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'nin_provider.dart';
 
 class BvnInputPage extends StatelessWidget {
-  const BvnInputPage({super.key});
+  static bool _fromHiveCreation = false;
+  
+  const BvnInputPage({
+    super.key,
+  });
+  
+  static void setFromHiveCreation(bool value) {
+    _fromHiveCreation = value;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +37,7 @@ class BvnInputPage extends StatelessWidget {
             onPressed: () {
               Navigator.of(context).pushReplacement(
                 MaterialPageRoute(builder: (context) => HomePage()),
-              ); // Navigate back when the button is pressed
+              ); // Navigate to home page when the button is pressed
             },
           ),
           backgroundColor: Colors.white,
@@ -175,15 +185,52 @@ class BvnInputPage extends StatelessWidget {
         ),
         child: ElevatedButton(
           onPressed: bvnProvider.isValid1
-              ? () {
+              ? () async {
                   print('Submitted BVN: ${bvnProvider.bvnController.text}');
-                  // Handle valid NIN submission
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => QuestionPage(),
-                    ),
-                  );
+                  
+                  // Get current user
+                  final user = FirebaseAuth.instance.currentUser;
+                  if (user != null) {
+                    try {
+                      // Store BVN data in Firebase
+                      await FirebaseFirestore.instance
+                          .collection('users')
+                          .doc(user.uid)
+                          .update({
+                        'bvn': bvnProvider.bvnController.text,
+                        'identityVerified': true,
+                        'identityVerificationDate': FieldValue.serverTimestamp(),
+                      });
+                      
+                                             // Show success message
+                       
+                       
+                       // Navigate based on where user came from
+                       if (_fromHiveCreation) {
+                         // Go back to hive creation requirement
+                         Navigator.of(context).popUntil((route) => route.isFirst);
+                         // Reset the flag
+                         _fromHiveCreation = false;
+                       } else {
+                         // Navigate to question page to continue the flow
+                         Navigator.pushReplacement(
+                           context,
+                           MaterialPageRoute(
+                             builder: (context) => QuestionPage(),
+                           ),
+                         );
+                       }
+                      
+                    } catch (e) {
+                      print('Error storing BVN data: $e');
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Error saving data. Please try again.'),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                    }
+                  }
                 }
               : null,
           style: ElevatedButton.styleFrom(

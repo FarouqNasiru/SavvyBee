@@ -145,7 +145,7 @@ class _LoadingScreenState extends State<LoadingScreen>
                 width: screenSize.width * 0.8,
                 height: 8,
                 decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.3),
+                  color: Colors.white.withOpacity(0.2),
                   borderRadius: BorderRadius.circular(4),
                 ),
                 child: AnimatedBuilder(

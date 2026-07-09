@@ -6,6 +6,7 @@ import 'package:savvybee/navbar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:savvybee/streak_tracker.dart';
+import 'package:savvybee/auth_screen.dart';
 
 
 class DashboardScreen extends StatefulWidget {
@@ -19,6 +20,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
   int _completedQuizzes = 0;
   int _activeHives = 0;
   int _currentStreak = 0;
+  int _totalCoins = 0;
+  int _totalXP = 0;
   bool _isLoading = true;
 
   @override
@@ -50,9 +53,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
           // Load streak data
           final streakResult = await StreakTracker.trackAppOpen();
           
-          // Calculate coins earned from hearts (each heart = 500 coins)
+          // Load actual coins and XP earned from quizzes
           final hearts = data['hearts'] ?? 0;
-          final coinsEarned = hearts * 500;
+          final coins = data['coins'] ?? 0;
+          final points = data['points'] ?? 0;
           
           // Get wallet balance - check multiple possible locations
           double walletBalance = 0.0;
@@ -90,12 +94,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
             _firstName = data['firstName'] ?? 'User';
             _walletBalance = walletBalance;
             _completedQuizzes = hearts; // Store hearts directly
+            _totalCoins = coins;
+            _totalXP = points;
             _currentStreak = streakResult.newStreak;
             _activeHives = activeHivesCount;
             _isLoading = false;
           });
           
-          print('Dashboard data loaded: Wallet: $_walletBalance, Hearts: $hearts, Coins: $coinsEarned');
+          print('Dashboard data loaded: Wallet: $_walletBalance, Hearts: $hearts, Coins: $_totalCoins, XP: $_totalXP');
         } else {
           setState(() {
             _isLoading = false;
@@ -114,8 +120,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
     }
   }
 
-  // Calculate total coins earned (each quiz is worth 500 points)
-  int get _totalCoinsEarned => _completedQuizzes * 500;
+  // Use actual coins earned from quizzes
+  int get _totalCoinsEarned => _totalCoins;
 
   @override
   Widget build(BuildContext context) {
@@ -361,7 +367,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                     13) /
                                 2,
                             height: 100,
-                            child: buildStatCard("21000", "Total XP",
+                            child: buildStatCard(_totalXP.toString(), "Total XP",
                                 "lib/assets/images/total-xp.png"),
                           ),
                           SizedBox(
@@ -416,6 +422,95 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ]),
 
             const SizedBox(height: 30),
+            
+            // Logout Button
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 26),
+              child: SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                  onPressed: () async {
+                    // Show confirmation dialog
+                    final shouldLogout = await showDialog<bool>(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text(
+                            'Logout',
+                            style: GoogleFonts.manrope(
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          content: Text(
+                            'Are you sure you want to logout?',
+                            style: GoogleFonts.manrope(),
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.of(context).pop(false),
+                              child: Text(
+                                'Cancel',
+                                style: GoogleFonts.manrope(
+                                  color: Colors.grey[600],
+                                ),
+                              ),
+                            ),
+                            TextButton(
+                              onPressed: () => Navigator.of(context).pop(true),
+                              child: Text(
+                                'Logout',
+                                style: GoogleFonts.manrope(
+                                  color: Colors.red[600],
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+
+                    if (shouldLogout == true) {
+                      // Sign out from Firebase
+                      await FirebaseAuth.instance.signOut();
+                      
+                      // Navigate to auth screen
+                      Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(
+                          builder: (context) => AuthScreen(),
+                        ),
+                        (Route<dynamic> route) => false,
+                      );
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red[600],
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    elevation: 2,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.logout, size: 20),
+                      SizedBox(width: 8),
+                      Text(
+                        'Logout',
+                        style: GoogleFonts.manrope(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            
+            const SizedBox(height: 20),
           ],
         ),
         ),

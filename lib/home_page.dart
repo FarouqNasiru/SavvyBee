@@ -285,47 +285,73 @@ class _HomePageState extends State<HomePage> {
                         vertical: screenHeight * 0.02,
                         horizontal: screenWidth * 0.05,
                       ),
-                      child: RichText(
-                        text: TextSpan(
-                          style: TextStyle(
-                            fontSize: screenHeight * 0.02,
-                            color: Colors.black,
+                      child: AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 300),
+                        transitionBuilder: (Widget child, Animation<double> animation) {
+                          return FadeTransition(
+                            opacity: animation,
+                            child: child,
+                          );
+                        },
+                        child: RichText(
+                          key: ValueKey('content_${provider.selectedCard}'),
+                          text: TextSpan(
+                            style: TextStyle(
+                              fontSize: screenHeight * 0.02,
+                              color: Colors.black,
+                            ),
+                            children: [
+                              TextSpan(
+                                text: provider.selectedCard == 'Budgeting'
+                                    ? 'Introduction to Budgeting\n'
+                                    : provider.selectedCard == 'Savings'
+                                        ? 'Introduction to Savings\n'
+                                        : 'Introduction to Numeracy\n',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: screenHeight * 0.02,
+                                ),
+                              ),
+                              TextSpan(
+                                text: provider.content.split('\n').length > 1
+                                    ? provider.content
+                                        .split('\n')
+                                        .sublist(1)
+                                        .join('\n')
+                                    : provider.content,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: screenHeight * 0.015,
+                                ),
+                              ),
+                            ],
                           ),
-                          children: [
-                            TextSpan(
-                              text: provider.selectedCard == 'Budgeting'
-                                  ? 'Introduction to Budgeting\n'
-                                  : provider.selectedCard == 'Savings'
-                                      ? 'Introduction to Savings\n'
-                                      : 'Introduction to Numeracy\n',
-                              style: TextStyle(
-                                fontWeight: FontWeight.w700,
-                                fontSize: screenHeight * 0.02,
-                              ),
-                            ),
-                            TextSpan(
-                              text: provider.content.split('\n').length > 1
-                                  ? provider.content
-                                      .split('\n')
-                                      .sublist(1)
-                                      .join('\n')
-                                  : provider.content,
-                              style: TextStyle(
-                                fontWeight: FontWeight.w400,
-                                fontSize: screenHeight * 0.015,
-                              ),
-                            ),
-                          ],
                         ),
                       ),
                     ),
                     SizedBox(height: screenHeight * 0.02),
 
-                    // Image
-                    Image.asset(
-                      'lib/assets/images/budgeting bee pose 2 1.png',
-                      width: screenWidth * 1.5,
-                      height: screenHeight * 0.315,
+                    // Dynamic Image with fade transition
+                    AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 500),
+                      transitionBuilder: (Widget child, Animation<double> animation) {
+                        return FadeTransition(
+                          opacity: animation,
+                          child: child,
+                        );
+                      },
+                                             child: Builder(
+                         builder: (context) {
+                           final imageSize = _getImageSizeForCard(provider.selectedCard, screenWidth, screenHeight);
+                           return Image.asset(
+                             _getImageForCard(provider.selectedCard),
+                             key: ValueKey(provider.selectedCard),
+                             width: imageSize['width'],
+                             height: imageSize['height'],
+                             fit: BoxFit.contain,
+                           );
+                         },
+                       ),
                     ),
                     SizedBox(height: screenHeight * 0.02),
 
@@ -355,7 +381,7 @@ class _HomePageState extends State<HomePage> {
                               'title': 'Savings',
                               'description':
                                   'Learn how to save money effectively and plan for future expenses. By the end, you will understand savings strategies and how to achieve your financial goals.',
-                              'levels': 4,
+                              'levels': 5,
                               'games': 20,
                               'coins': 2000,
                             },
@@ -364,7 +390,7 @@ class _HomePageState extends State<HomePage> {
                               'title': 'Numeracy',
                               'description':
                                   'Improve your numerical skills to better manage your finances. By the end, you will understand key numeracy concepts and how to apply them in real-life scenarios.',
-                              'levels': 6,
+                              'levels': 5,
                               'games': 30,
                               'coins': 3000,
                             },
@@ -455,6 +481,44 @@ class _HomePageState extends State<HomePage> {
         ),
       ],
     );
+  }
+
+  String _getImageForCard(String cardTitle) {
+    switch (cardTitle) {
+      case 'Budgeting':
+        return 'lib/assets/images/budgeting bee pose 2 1.png';
+      case 'Savings':
+        return 'lib/assets/images/savings bee pose lg.PNG';
+      case 'Numeracy':
+        return 'lib/assets/images/numeracy_bee_2.PNG';
+      default:
+        return 'lib/assets/images/budgeting bee pose 2 1.png';
+    }
+  }
+
+  Map<String, double> _getImageSizeForCard(String cardTitle, double screenWidth, double screenHeight) {
+    switch (cardTitle) {
+      case 'Budgeting':
+        return {
+          'width': screenWidth * 1.5,
+          'height': screenHeight * 0.315,
+        };
+      case 'Savings':
+        return {
+          'width': screenWidth * 1.5, // Larger for smaller image
+          'height': screenHeight * 0.315, // Taller for smaller image
+        };
+      case 'Numeracy':
+        return {
+          'width': screenWidth * 1.2, // Smaller for larger image
+          'height': screenHeight * 0.315, // Shorter for larger image
+        };
+      default:
+        return {
+          'width': screenWidth * 1.5,
+          'height': screenHeight * 0.315,
+        };
+    }
   }
 
   Widget _buildCard(BuildContext context, CardContentProvider provider,

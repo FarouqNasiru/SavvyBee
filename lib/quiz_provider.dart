@@ -136,7 +136,7 @@ final Map<String, List<List<List<QuizQuestion>>>> quizBank = {
           options: [
             "To spend more money on wants",
             "To check if you can stop budgeting completely",
-            "To make sure you’re staying on track and can adjust if things change",
+            "To make sure you are staying on track and can adjust if things change",
             "To add more random expenses"
           ],
           correctAnswerIndex: 2,
@@ -199,7 +199,7 @@ final Map<String, List<List<List<QuizQuestion>>>> quizBank = {
         ),
         QuizQuestion.multipleChoice(
           question:
-              "In the 50/30/20 rule, buying clothes you don’t urgently need falls under “needs.”",
+              "In the 50/30/20 rule, buying clothes you don't urgently need falls under 'needs.'",
           options: ["True", "False"],
           correctAnswerIndex: 1,
         ),
@@ -217,7 +217,7 @@ final Map<String, List<List<List<QuizQuestion>>>> quizBank = {
           question: "Why is the 50/30/20 rule helpful when making a budget?",
           options: [
             "It helps you spend more on fun things",
-            "It guarantees you won’t have to save",
+            "It guarantees you wont have to save",
             "It balances spending, saving, and needs",
             "It makes sure you use credit cards often"
           ],
@@ -251,7 +251,7 @@ final Map<String, List<List<List<QuizQuestion>>>> quizBank = {
           correctAnswerIndex: 0,
         ),
         QuizQuestion.multipleChoice(
-          question: "Which of the following is an example of a “need”?",
+          question: "Which of the following is an example of a 'need'?",
           options: [
             "Ice cream",
             "New headphones",
@@ -975,7 +975,7 @@ final Map<String, List<List<List<QuizQuestion>>>> quizBank = {
                 "Which technique is a practical budget hack to help control spending?",
             options: [
               "Using the envelope system to limit cash for each category",
-              "Relying on credit cards so you don’t notice spending",
+              "Relying on credit cards so you dont notice spending",
               "Buying items immediately when on sale, without comparison",
               "Ignoring small daily expenses"
             ],
@@ -997,7 +997,7 @@ final Map<String, List<List<List<QuizQuestion>>>> quizBank = {
       // Stage 3
       [
         QuizQuestion.multipleChoice(
-            question: "What does “smart spending” mean?",
+            question: "What does 'smart spending' mean?",
             options: [
               "Buying only the cheapest items even if quality is low",
               "Carefully planning purchases by comparing prices and needs",
@@ -1053,7 +1053,7 @@ final Map<String, List<List<List<QuizQuestion>>>> quizBank = {
               },
               {
                 "word":
-                    "Buying something immediately just because it’s marked down",
+                    "Buying something immediately just because it's marked down",
                 "meaning": "Risky Spending"
               }
             ]),
@@ -1146,7 +1146,7 @@ final Map<String, List<List<List<QuizQuestion>>>> quizBank = {
       // Stage 5
       [
         QuizQuestion.multipleChoice(
-            question: "What is a “budget hack” and why is it useful?",
+            question: "What is a 'budget hack' and why is it useful?",
             options: [
               "A clever tip that helps you save money by reducing unnecessary spending",
               "A secret plan to double your income overnight",
@@ -1659,7 +1659,7 @@ final Map<String, List<List<List<QuizQuestion>>>> quizBank = {
             options: [
               "To make room for more unnecessary expenses",
               "To ignore what went wrong",
-              "To identify what worked, what didn’t, and make improvements",
+              "To identify what worked, what didn't, and make improvements",
               "To close your budget forever"
             ],
             correctAnswerIndex: 2,
@@ -1802,7 +1802,7 @@ final Map<String, List<List<List<QuizQuestion>>>> quizBank = {
       //stage 3
       [
         QuizQuestion.multipleChoice(
-            question: "What does it mean to ‘stay consistent’ with budgeting?",
+            question: "What does it mean to 'stay consistent' with budgeting?",
             options: [
               "Budget once and forget about it",
               "Make budgeting more complicated over time",
@@ -1892,9 +1892,9 @@ final Map<String, List<List<List<QuizQuestion>>>> quizBank = {
                 "Budgets should evolve with your needs — flexibility helps you stay on track during life changes."),
         QuizQuestion.multipleChoice(
             question:
-                "What’s a healthy way to respond when your income decreases?",
+                "What's a healthy way to respond when your income decreases?",
             options: [
-              "Pretend it didn’t happen",
+              "Pretend it didn't happen",
               "Continue spending the same",
               "Adjust your budget to reflect your new income",
               "Borrow money without a plan"
@@ -1963,7 +1963,7 @@ final Map<String, List<List<List<QuizQuestion>>>> quizBank = {
             options: [
               "To criticize every mistake you've made",
               "To give up budgeting completely",
-              "To look back at what you’ve learned, celebrate progress, and improve",
+              "To look back at what you've learned, celebrate progress, and improve",
               "To ignore the past and start from scratch every month"
             ],
             correctAnswerIndex: 2,
@@ -1975,7 +1975,7 @@ final Map<String, List<List<List<QuizQuestion>>>> quizBank = {
             options: ["confused", "intentional", "impulsive", "careless"],
             correctAnswerIndex: 1,
             explanation:
-                "Intentionality comes from understanding what worked and what didn’t."),
+                "Intentionality comes from understanding what worked and what didn't."),
         QuizQuestion.wordMeaning(
             question: "Match each reflection activity with its benefit.",
             wordPairs: [
@@ -2021,8 +2021,8 @@ final Map<String, List<List<List<QuizQuestion>>>> quizBank = {
           question: "Arrange these steps to reflect on your budgeting journey:",
           orderingItems: [
             "Review your budgeting wins and challenges",
-            "Write down lessons you’ve learned",
-            "Celebrate the progress you’ve made",
+            "Write down lessons you've learned",
+            "Celebrate the progress you've made",
             "Adjust your financial goals if needed",
             "Commit to applying your insights going forward"
           ],
@@ -2042,8 +2042,8 @@ final Map<String, List<List<List<QuizQuestion>>>> quizBank = {
           options: [
             "A new video game when your old one still works",
             "A pair of shoes because your only pair is torn",
-            "A new backpack because it’s your favorite color",
-            "A toy on sale that you’ve wanted for months"
+            "A new backpack because it's your favorite color",
+            "A toy on sale that you've wanted for months"
           ],
           correctAnswerIndex: 1,
           explanation:
@@ -2064,7 +2064,7 @@ final Map<String, List<List<List<QuizQuestion>>>> quizBank = {
         ),
         QuizQuestion.multipleChoice(
           question:
-              "When deciding what to buy, it’s smart to ask: Do I truly _____ this, or do I just want it?",
+              "When deciding what to buy, it's smart to ask: Do I truly _____ this, or do I just want it?",
           options: ["like", "want", "need", "own"],
           correctAnswerIndex: 2,
           explanation: "It's wise to prioritize needs over wants.",
@@ -2093,7 +2093,7 @@ final Map<String, List<List<List<QuizQuestion>>>> quizBank = {
             "You might lose your money",
             "You could miss out on fun",
             "You may not have enough left for important things",
-            "You’ll get bored later"
+            "You'll get bored later"
           ],
           correctAnswerIndex: 2,
           explanation:
@@ -2107,8 +2107,8 @@ final Map<String, List<List<List<QuizQuestion>>>> quizBank = {
           options: [
             "A new video game when your old one still works",
             "A pair of shoes because your only pair is torn",
-            "A new backpack because it’s your favorite color",
-            "A toy on sale that you’ve wanted for months"
+            "A new backpack because it's your favorite color",
+            "A toy on sale that you've wanted for months"
           ],
           correctAnswerIndex: 1,
           explanation:
@@ -2129,7 +2129,7 @@ final Map<String, List<List<List<QuizQuestion>>>> quizBank = {
         ),
         QuizQuestion.multipleChoice(
           question:
-              "When deciding what to buy, it’s smart to ask: Do I truly _____ this, or do I just want it?",
+              "When deciding what to buy, it's smart to ask: Do I truly _____ this, or do I just want it?",
           options: ["like", "want", "need", "own"],
           correctAnswerIndex: 2,
           explanation: "It's wise to prioritize needs over wants.",
@@ -2158,7 +2158,7 @@ final Map<String, List<List<List<QuizQuestion>>>> quizBank = {
             "You might lose your money",
             "You could miss out on fun",
             "You may not have enough left for important things",
-            "You’ll get bored later"
+            "You'll get bored later"
           ],
           correctAnswerIndex: 2,
           explanation:
@@ -2171,7 +2171,7 @@ final Map<String, List<List<List<QuizQuestion>>>> quizBank = {
           question:
               "Which of these is the strongest reason to save part of your money?",
           options: [
-            "So you don’t have to carry all your money around",
+            "So you don't have to carry all your money around",
             "So you can buy anything you want later",
             "So you can prepare for something important or unexpected",
             "So others think you are careful"
@@ -2232,10 +2232,10 @@ final Map<String, List<List<List<QuizQuestion>>>> quizBank = {
         QuizQuestion.multipleChoice(
           question: "What could happen if you never try to save?",
           options: [
-            "You’ll never get money again",
-            "You’ll need to buy more wants",
+            "You'll never get money again",
+            "You'll need to buy more wants",
             "You might have to borrow when something important comes up",
-            "You’ll automatically become rich someday"
+            "You'll automatically become rich someday"
           ],
           correctAnswerIndex: 2,
           explanation: "Without saving, unexpected needs may force borrowing.",
@@ -2310,7 +2310,7 @@ final Map<String, List<List<List<QuizQuestion>>>> quizBank = {
             "You can withdraw money anytime without a plan",
             "Your money is safer and can grow with interest",
             "The bank will spend your money for you",
-            "It’s harder to track how much you have"
+            "It's harder to track how much you have"
           ],
           correctAnswerIndex: 1,
           explanation: "Banks offer security and interest on your savings.",
@@ -2321,7 +2321,7 @@ final Map<String, List<List<List<QuizQuestion>>>> quizBank = {
         QuizQuestion.multipleChoice(
           question: "Why is it important to set a savings goal?",
           options: [
-            "It helps you stay focused on what you’re saving for",
+            "It helps you stay focused on what you're saving for",
             "It makes spending money more fun",
             "It stops you from using money for anything else",
             "It allows you to spend whenever you feel like it"
@@ -2342,7 +2342,7 @@ final Map<String, List<List<List<QuizQuestion>>>> quizBank = {
         ),
         QuizQuestion.multipleChoice(
           question:
-              "If you don’t have a clear __________, it’s easy to spend your savings on unnecessary things.",
+              "If you don't have a clear __________, it's easy to spend your savings on unnecessary things.",
           options: ["Goal", "Friend", "Receipt", "Game plan"],
           correctAnswerIndex: 0,
           explanation:
@@ -2353,7 +2353,7 @@ final Map<String, List<List<List<QuizQuestion>>>> quizBank = {
                 "Match each action with whether it helps or hurts your savings:",
             wordPairs: [
               {"word": "Creating a savings plan", "meaning": "Helps"},
-              {"word": "Spending on things you don’t need", "meaning": "Hurts"},
+              {"word": "Spending on things you don't need", "meaning": "Hurts"},
               {"word": "Tracking your progress", "meaning": "Helps"},
               {"word": "Borrowing money to save more", "meaning": "Hurts"}
             ]),
@@ -2374,7 +2374,7 @@ final Map<String, List<List<List<QuizQuestion>>>> quizBank = {
         QuizQuestion.multipleChoice(
           question: "Which of the following is a good saving habit?",
           options: [
-            "Spending first, then saving what’s left",
+            "Spending first, then saving what's left",
             "Saving a portion of your money before spending",
             "Only saving when you receive a large amount of money",
             "Keeping all your money in your wallet"
@@ -2405,7 +2405,7 @@ final Map<String, List<List<List<QuizQuestion>>>> quizBank = {
             ]),
         QuizQuestion.multipleChoice(
           question:
-              "A good way to avoid spending your savings is to keep it in a __________ where you can’t easily access it.",
+              "A good way to avoid spending your savings is to keep it in a __________ where you can't easily access it.",
           options: ["Wallet", "Locked box", "Bank account", "Toy box"],
           correctAnswerIndex: 2,
         ),
@@ -2437,7 +2437,7 @@ final Map<String, List<List<List<QuizQuestion>>>> quizBank = {
           question:
               "What should you do if you want to save up for something expensive?",
           options: [
-            "Give up on saving since it’s too expensive",
+            "Give up on saving since it's too expensive",
             "Save small amounts over time",
             "Spend first and save only if possible",
             "Borrow money from friends and family"
@@ -2475,7 +2475,7 @@ final Map<String, List<List<List<QuizQuestion>>>> quizBank = {
           options: [
             "Saving is only for adults",
             "The earlier you start saving, the better",
-            "You don’t need a reason to save",
+            "You don't need a reason to save",
             "Saving makes life harder"
           ],
           correctAnswerIndex: 1,
@@ -2552,12 +2552,12 @@ final Map<String, List<List<List<QuizQuestion>>>> quizBank = {
               }
             ]),
         QuizQuestion.multipleChoice(
-          question: "What happens when you don’t track your money?",
+          question: "What happens when you don't track your money?",
           options: [
             "You might spend more than you planned",
             "Your savings will grow faster",
             "You will always have extra money",
-            "You won’t need to budget"
+            "You won't need to budget"
           ],
           correctAnswerIndex: 0,
           explanation:
@@ -2632,12 +2632,12 @@ final Map<String, List<List<List<QuizQuestion>>>> quizBank = {
               }
             ]),
         QuizQuestion.multipleChoice(
-          question: "What happens when you don’t track your money?",
+          question: "What happens when you don't track your money?",
           options: [
             "You might spend more than you planned",
             "Your savings will grow faster",
             "You will always have extra money",
-            "You won’t need to budget"
+            "You won't need to budget"
           ],
           correctAnswerIndex: 0,
           explanation:
@@ -2703,12 +2703,12 @@ final Map<String, List<List<List<QuizQuestion>>>> quizBank = {
           options: [
             "To make sure you are saving enough",
             "To make spending money more fun",
-            "So you don’t have to plan your savings",
-            "Because tracking money doesn’t matter"
+            "So you don't have to plan your savings",
+            "Because tracking money doesn't matter"
           ],
           correctAnswerIndex: 0,
           explanation:
-              "Reviewing your income and expenses helps ensure you’re on track with saving goals.",
+              "Reviewing your income and expenses helps ensure you're on track with saving goals.",
         ),
       ],
       // Stage 3
@@ -2794,7 +2794,7 @@ final Map<String, List<List<List<QuizQuestion>>>> quizBank = {
           ],
           correctAnswerIndex: 0,
           explanation:
-              "It’s smart to confirm affordability before any major purchase.",
+              "It's smart to confirm affordability before any major purchase.",
         ),
         QuizQuestion.ordering(
           question:
@@ -2809,7 +2809,7 @@ final Map<String, List<List<List<QuizQuestion>>>> quizBank = {
         ),
         QuizQuestion.multipleChoice(
           question:
-              "Spending money on things you don’t need is called __________ spending.",
+              "Spending money on things you don't need is called __________ spending.",
           options: ["Smart", "Impulse", "Budgeted", "Automatic"],
           correctAnswerIndex: 1,
           explanation: "Impulse spending is unplanned and often unnecessary.",
@@ -2833,7 +2833,7 @@ final Map<String, List<List<List<QuizQuestion>>>> quizBank = {
           ],
           correctAnswerIndex: 1,
           explanation:
-              "Pausing before a purchase helps you decide if it’s necessary.",
+              "Pausing before a purchase helps you decide if it's necessary.",
         ),
       ],
       //stage 5
@@ -2877,7 +2877,7 @@ final Map<String, List<List<List<QuizQuestion>>>> quizBank = {
             ]),
         QuizQuestion.multipleChoice(
           question:
-              "What should you do if you realize you’re spending too much?",
+              "What should you do if you realize you're spending too much?",
           options: [
             "Adjust your budget",
             "Keep spending anyway",
@@ -2899,7 +2899,7 @@ final Map<String, List<List<List<QuizQuestion>>>> quizBank = {
         ),
         QuizQuestion.multipleChoice(
           question:
-              "Spending money on things you don’t need without planning is called __________ spending.",
+              "Spending money on things you don't need without planning is called __________ spending.",
           options: ["Smart", "Impulse", "Budgeted", "Automatic"],
           correctAnswerIndex: 1,
         ),
@@ -2929,8 +2929,8 @@ final Map<String, List<List<List<QuizQuestion>>>> quizBank = {
           options: [
             "To make sure you are saving enough",
             "To make spending money more fun",
-            "So you don’t have to plan your savings",
-            "Because tracking money doesn’t matter"
+            "So you don't have to plan your savings",
+            "Because tracking money doesn't matter"
           ],
           correctAnswerIndex: 0,
         ),
@@ -2967,7 +2967,7 @@ final Map<String, List<List<List<QuizQuestion>>>> quizBank = {
           question:
               "Arrange these steps in the right order for smart spending:",
           orderingItems: [
-            "Decide if it’s worth the cost",
+            "Decide if it's worth the cost",
             "Compare prices before buying",
             "Think about whether you really need it",
             "Check if you have enough money"
@@ -2976,7 +2976,7 @@ final Map<String, List<List<List<QuizQuestion>>>> quizBank = {
         ),
         QuizQuestion.multipleChoice(
           question:
-              "Before buying something, it’s smart to __________ to see if you can get a better deal.",
+              "Before buying something, it's smart to __________ to see if you can get a better deal.",
           options: [
             "Compare prices",
             "Ignore the price",
@@ -3010,8 +3010,8 @@ final Map<String, List<List<List<QuizQuestion>>>> quizBank = {
           options: [
             "It helps you make better choices and avoid wasting money",
             "It makes shopping more complicated",
-            "It’s unnecessary because you can always get more money",
-            "It doesn’t matter because all purchases are good"
+            "It's unnecessary because you can always get more money",
+            "It doesn't matter because all purchases are good"
           ],
           correctAnswerIndex: 0,
           explanation:
@@ -3037,7 +3037,7 @@ final Map<String, List<List<List<QuizQuestion>>>> quizBank = {
             wordPairs: [
               {
                 "word":
-                    "Buying a snack you didn’t plan for just because you saw it",
+                    "Buying a snack you didn't plan for just because you saw it",
                 "meaning": "Impulse Buying"
               },
               {
@@ -3072,7 +3072,7 @@ final Map<String, List<List<List<QuizQuestion>>>> quizBank = {
               },
               {"word": "Thinking before spending", "meaning": "Helps"},
               {
-                "word": "Spending money on things you don’t need",
+                "word": "Spending money on things you don't need",
                 "meaning": "Hurts"
               }
             ]),
@@ -3120,7 +3120,7 @@ final Map<String, List<List<List<QuizQuestion>>>> quizBank = {
                 "meaning": "Poor Value for Money"
               },
               {
-                "word": "Buying something just because it’s on sale",
+                "word": "Buying something just because it's on sale",
                 "meaning": "Poor Value for Money"
               }
             ]),
@@ -3153,7 +3153,7 @@ final Map<String, List<List<List<QuizQuestion>>>> quizBank = {
               }
             ]),
         QuizQuestion.multipleChoice(
-          question: "What does “value for money” mean?",
+          question: "What does 'value for money' mean?",
           options: [
             "Paying the highest price for everything",
             "Getting the best quality for the best price",
@@ -3173,7 +3173,7 @@ final Map<String, List<List<List<QuizQuestion>>>> quizBank = {
             "It helps you manage your money wisely",
             "It stops you from buying anything",
             "It makes spending more difficult",
-            "It’s not useful at all"
+            "It's not useful at all"
           ],
           correctAnswerIndex: 0,
           explanation:
@@ -3185,7 +3185,7 @@ final Map<String, List<List<List<QuizQuestion>>>> quizBank = {
           orderingItems: [
             "Decide how much money you have",
             "Plan for important expenses first",
-            "Use what’s left for extra spending",
+            "Use what's left for extra spending",
             "Set a little aside for savings"
           ],
           correctOrder: [0, 1, 3, 2],
@@ -3270,7 +3270,7 @@ final Map<String, List<List<List<QuizQuestion>>>> quizBank = {
             wordPairs: [
               {"word": "Setting a spending limit", "meaning": "Smart Spending"},
               {
-                "word": "Buying something just because it’s on sale",
+                "word": "Buying something just because it's on sale",
                 "meaning": "Not Smart Spending"
               },
               {
@@ -3307,7 +3307,7 @@ final Map<String, List<List<List<QuizQuestion>>>> quizBank = {
               "Arrange these steps in the correct order for making a spending plan:",
           orderingItems: [
             "Plan for important expenses first",
-            "Use what’s left for extra spending",
+            "Use what's left for extra spending",
             "Set aside money for savings",
             "Decide how much money you have"
           ],
@@ -3328,9 +3328,9 @@ final Map<String, List<List<List<QuizQuestion>>>> quizBank = {
           question: "What should you do before making a big purchase?",
           options: [
             "Think about whether you really need it",
-            "Buy it immediately so you don’t miss out",
+            "Buy it immediately so you don't miss out",
             "Let your friends decide for you",
-            "Spend all your money on it, even if you don’t have enough for other things"
+            "Spend all your money on it, even if you don't have enough for other things"
           ],
           correctAnswerIndex: 0,
         ),
@@ -3353,7 +3353,7 @@ final Map<String, List<List<List<QuizQuestion>>>> quizBank = {
         QuizQuestion.multipleChoice(
           question: "Why is it important to save money before spending?",
           options: [
-            "So you don’t run out of money for important things",
+            "So you don't run out of money for important things",
             "Because saving is more fun than spending",
             "So you can buy anything you want immediately",
             "Because spending is not allowed"
@@ -3368,7 +3368,7 @@ final Map<String, List<List<List<QuizQuestion>>>> quizBank = {
           orderingItems: [
             "Track your savings progress",
             "Decide how much to save",
-            "Spend what’s left on needs and wants",
+            "Spend what's left on needs and wants",
             "Set aside your savings"
           ],
           correctOrder: [1, 3, 2, 0],
@@ -3392,7 +3392,7 @@ final Map<String, List<List<List<QuizQuestion>>>> quizBank = {
             wordPairs: [
               {"word": "Creating a savings plan", "meaning": "Helps"},
               {
-                "word": "Spending first, then saving what’s left",
+                "word": "Spending first, then saving what's left",
                 "meaning": "Hurts"
               },
               {"word": "Setting a savings goal", "meaning": "Helps"},
@@ -3404,7 +3404,7 @@ final Map<String, List<List<List<QuizQuestion>>>> quizBank = {
           options: [
             "Keeping your savings separate from your spending money",
             "Buying everything you want first, then saving later",
-            "Waiting until the end of the month to see what’s left",
+            "Waiting until the end of the month to see what's left",
             "Spending all your money at once to avoid thinking about it"
           ],
           correctAnswerIndex: 0,
@@ -3487,7 +3487,7 @@ final Map<String, List<List<List<QuizQuestion>>>> quizBank = {
             "Earning money means you worked for it, while receiving money as a gift means someone gave it to you for free",
             "They are the same thing",
             "Earning money is only for adults",
-            "Receiving money as a gift means you can’t spend it"
+            "Receiving money as a gift means you can't spend it"
           ],
           correctAnswerIndex: 0,
           explanation:
@@ -3503,7 +3503,7 @@ final Map<String, List<List<List<QuizQuestion>>>> quizBank = {
             "It helps you stay focused and avoid unnecessary spending",
             "It allows you to spend money freely without a plan",
             "It means you can never spend money on fun things",
-            "It doesn’t make a difference in how you save"
+            "It doesn't make a difference in how you save"
           ],
           correctAnswerIndex: 0,
           explanation:
@@ -3533,7 +3533,7 @@ final Map<String, List<List<List<QuizQuestion>>>> quizBank = {
               {"word": "Saving for a bicycle", "meaning": "A short-term goal"},
               {"word": "Saving for university", "meaning": "A long-term goal"},
               {
-                "word": "Saving for a friend’s birthday gift",
+                "word": "Saving for a friend's birthday gift",
                 "meaning": "A short-term goal"
               },
               {"word": "Saving for retirement", "meaning": "A long-term goal"}
@@ -3658,7 +3658,7 @@ final Map<String, List<List<List<QuizQuestion>>>> quizBank = {
                 "meaning": "Ways That Hurt Savings"
               },
               {
-                "word": "Borrowing money to buy things you don’t need",
+                "word": "Borrowing money to buy things you don't need",
                 "meaning": "Ways That Hurt Savings"
               },
             ]),
@@ -3697,7 +3697,7 @@ final Map<String, List<List<List<QuizQuestion>>>> quizBank = {
           question:
               "Which of these is the best way to avoid spending money you meant to save?",
           options: [
-            "Keep all your money in your pocket so it’s easy to access",
+            "Keep all your money in your pocket so it's easy to access",
             "Put your savings in a separate account or piggy bank",
             "Spend your money first and save whatever is left",
             "Only save when you get extra money"
@@ -3707,7 +3707,7 @@ final Map<String, List<List<List<QuizQuestion>>>> quizBank = {
         QuizQuestion.multipleChoice(
           question: "What is the biggest benefit of passive income?",
           options: [
-            "It allows you to earn money even when you’re not actively working",
+            "It allows you to earn money even when you're not actively working",
             "It always makes more money than active income",
             "It is guaranteed and risk-free",
             "It replaces the need for a budget"
@@ -3763,7 +3763,7 @@ final Map<String, List<List<List<QuizQuestion>>>> quizBank = {
             "Because they want to give away free money",
             "To encourage people to save money with them",
             "To help people spend more money",
-            "Because they don’t know what else to do with it"
+            "Because they don't know what else to do with it"
           ],
           correctAnswerIndex: 1,
           explanation:
@@ -3771,7 +3771,7 @@ final Map<String, List<List<List<QuizQuestion>>>> quizBank = {
         ),
         QuizQuestion.wordMeaning(
             question:
-                "Sort these into Ways to Grow Savings and Ways That Don’t Help Savings Grow:",
+                "Sort these into Ways to Grow Savings and Ways That Don't Help Savings Grow:",
             wordPairs: [
               {
                 "word": "Keeping money in a savings account",
@@ -3784,11 +3784,11 @@ final Map<String, List<List<List<QuizQuestion>>>> quizBank = {
               {"word": "Saving regularly", "meaning": "Ways to Grow Savings"},
               {
                 "word": "Spending all your money",
-                "meaning": "Ways That Don’t Help Savings Grow"
+                "meaning": "Ways That Don't Help Savings Grow"
               },
               {
                 "word": "Borrowing money to save more",
-                "meaning": "Ways That Don’t Help Savings Grow"
+                "meaning": "Ways That Don't Help Savings Grow"
               },
             ]),
         QuizQuestion.multipleChoice(
@@ -3839,10 +3839,10 @@ final Map<String, List<List<List<QuizQuestion>>>> quizBank = {
           question:
               "Why is compound interest better than simple interest for growing your savings?",
           options: [
-            "It adds interest to both your savings and the interest you’ve already earned",
+            "It adds interest to both your savings and the interest you've already earned",
             "It keeps your money locked away forever",
             "It only works if you save millions of naira",
-            "It doesn’t actually help your savings grow"
+            "It doesn't actually help your savings grow"
           ],
           correctAnswerIndex: 0,
           explanation:
@@ -3977,7 +3977,7 @@ final Map<String, List<List<List<QuizQuestion>>>> quizBank = {
           options: [
             "It helps you avoid unnecessary spending and reach your goals",
             "It makes saving harder",
-            "It means you can’t buy anything you want",
+            "It means you can't buy anything you want",
             "It is only important for rich people"
           ],
           correctAnswerIndex: 0,
@@ -4156,7 +4156,7 @@ final Map<String, List<List<List<QuizQuestion>>>> quizBank = {
               "What is the best way to stay committed to your savings goal?",
           options: [
             "Spend your savings if something fun comes up",
-            "Track your progress and remind yourself why you’re saving",
+            "Track your progress and remind yourself why you're saving",
             "Wait until you have a lot of money before you start saving",
             "Save money only when you feel like it"
           ],
@@ -5237,7 +5237,7 @@ final Map<String, List<List<List<QuizQuestion>>>> quizBank = {
           options: [
             "You will earn exactly ₦250 in interest.",
             "The total amount will be less than ₦1,300.",
-            "The total amount will be more than what you’d earn with simple interest over 5 years.",
+            "The total amount will be more than what you'd earn with simple interest over 5 years.",
             "Compound interest does not affect the total amount over time."
           ],
           correctAnswerIndex: 2,
@@ -5644,6 +5644,14 @@ class QuizProvider extends ChangeNotifier {
   List<int> currentOrder = [];
   bool isOrderChecked = false;
   bool isOrderCorrect = false;
+  
+  // Reward system variables
+  int totalCoinsEarned = 0;
+  int totalXPEarned = 0;
+  int correctAnswersInRow = 0;
+  int x2MultiplierThreshold = 3; // Get x2 multiplier after 3 correct answers in a row
+  bool showX2Multiplier = false;
+
 
   QuizProvider({
     required this.category,
@@ -5672,8 +5680,39 @@ class QuizProvider extends ChangeNotifier {
 
   bool checkAnswer() {
     showFeedback = true;
+    final isCorrect = selectedIndex == currentQuestion.correctAnswerIndex;
+    
+
+    
+    if (isCorrect) {
+      handleCorrectAnswer();
+    } else {
+      // Reset streak if wrong answer
+      correctAnswersInRow = 0;
+      showX2Multiplier = false;
+    }
+    
     notifyListeners();
-    return selectedIndex == currentQuestion.correctAnswerIndex;
+    return isCorrect;
+  }
+  
+  void handleCorrectAnswer() {
+    // Add coins for correct answer
+    totalCoinsEarned += 100;
+    
+    // Add XP based on current multiplier status
+    if (showX2Multiplier) {
+      totalXPEarned += 20; // x2 multiplier active
+    } else {
+      totalXPEarned += 10; // normal XP
+    }
+    
+    correctAnswersInRow++;
+    
+    // Check if x2 multiplier should be activated
+    if (correctAnswersInRow >= x2MultiplierThreshold && !showX2Multiplier) {
+      showX2Multiplier = true;
+    }
   }
 
   // --- Word-Meaning ---
@@ -5704,6 +5743,12 @@ class QuizProvider extends ChangeNotifier {
           currentQuestion.wordPairs![selectedMeaningIndex!]['meaning'];
       if (isCorrect) {
         matchedPairs[selectedWordIndex!] = selectedMeaningIndex!;
+        
+        // Check if all pairs are matched (question complete)
+        if (allPairsMatched) {
+          
+          handleCorrectAnswer();
+        }
       }
       selectedWordIndex = null;
       selectedMeaningIndex = null;
@@ -5743,6 +5788,17 @@ class QuizProvider extends ChangeNotifier {
       currentOrder,
       currentQuestion.correctOrder ?? [],
     );
+    
+
+    
+    if (isOrderCorrect) {
+      handleCorrectAnswer();
+    } else {
+      // Reset streak if wrong answer
+      correctAnswersInRow = 0;
+      showX2Multiplier = false;
+    }
+    
     notifyListeners();
     return isOrderCorrect;
   }
@@ -5799,4 +5855,6 @@ class QuizProvider extends ChangeNotifier {
   }
 
   bool get hasNextQuestion => currentQuestionIndex < questions.length - 1;
+  
+
 }

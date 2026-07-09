@@ -5,6 +5,9 @@ import 'package:savvybee/home_page.dart';
 import 'package:savvybee/onboarding_screen10.dart';
 import 'package:savvybee/reusable_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:savvybee/google_auth_service.dart';
 
 final _firebase = FirebaseAuth.instance;
 
@@ -179,6 +182,90 @@ class _LoginPageState extends State<LoginPage> {
                   ReusableButton(
                     text: 'Log In',
                     onPressed: _submit,
+                  ),
+                  SizedBox(height: screenHeight * 0.02), // ~16px
+                  
+                  // Divider
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Divider(
+                          color: Colors.grey[300],
+                          height: 1,
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.02),
+                        child: Text(
+                          'or login with',
+                          style: TextStyle(
+                            fontSize: screenWidth * 0.035,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: Divider(
+                          color: Colors.grey[300],
+                          height: 1,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: screenHeight * 0.02), // ~16px
+                  
+                  // Google Sign-In Button
+                  SizedBox(
+                    width: double.infinity,
+                    height: screenHeight * 0.06,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        border: const Border(
+                          top: BorderSide(color: Color.fromARGB(255, 220, 220, 220), width: 1),
+                          left: BorderSide(color: Color.fromARGB(255, 220, 220, 220), width: 1),
+                          right: BorderSide(color: Color.fromARGB(255, 220, 220, 220), width: 3),
+                          bottom: BorderSide(color: Color.fromARGB(255, 220, 220, 220), width: 3),
+                        ),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white,
+                          foregroundColor: Colors.black,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          elevation: 2,
+                        ),
+                        onPressed: () async {
+                          final userCredential = await signInWithGoogle(context);
+                          if (userCredential != null) {
+                            Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(builder: (context) => SavvyBeeOnboarding10()),
+                            );
+                          }
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset(
+                              "lib/assets/images/devicon_google.png",
+                              width: screenWidth * 0.06,
+                              height: screenWidth * 0.06,
+                            ),
+                            SizedBox(width: screenWidth * 0.025),
+                            Text(
+                              'Continue with Google',
+                              style: TextStyle(
+                                fontSize: screenWidth * 0.04,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
                   SizedBox(height: screenHeight * 0.012), // ~10px
                   Text(

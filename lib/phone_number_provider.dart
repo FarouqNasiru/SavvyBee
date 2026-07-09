@@ -51,53 +51,26 @@ class PhoneNumberProvider extends ChangeNotifier {
     _errorMessage = null;
     notifyListeners();
 
-    try {
-      await FirebaseAuth.instance.verifyPhoneNumber(
-        phoneNumber: _completePhoneNumber,
-        verificationCompleted: (PhoneAuthCredential credential) {
-          // Auto-verification if supported
-          _isLoading = false;
-          notifyListeners();
-        },
-        verificationFailed: (FirebaseAuthException e) {
-          _isLoading = false;
-          _errorMessage = e.message ?? 'Verification failed';
-          notifyListeners();
-        },
-        codeSent: (String verificationId, int? resendToken) {
-          _verificationId = verificationId;
-          _isLoading = false;
-          _errorMessage = null;
-          notifyListeners();
-        },
-        codeAutoRetrievalTimeout: (String verificationId) {
-          _verificationId = verificationId;
-          _isLoading = false;
-          notifyListeners();
-        },
-        timeout: const Duration(seconds: 60),
-      );
-      return true;
-    } catch (e) {
-      _isLoading = false;
-      _errorMessage = e.toString();
-      notifyListeners();
-      return false;
-    }
+    // Simulate loading for 2 seconds to show the loading state
+    await Future.delayed(const Duration(seconds: 2));
+    
+    // Skip Firebase verification and simulate success
+    _verificationId = 'mock_verification_id';
+    _isLoading = false;
+    _errorMessage = null;
+    notifyListeners();
+    
+    return true;
   }
 
   Future<bool> verifyOTP(String otp) async {
     if (_verificationId == null) return false;
 
-    try {
-      PhoneAuthCredential credential = PhoneAuthProvider.credential(
-        verificationId: _verificationId!,
-        smsCode: otp,
-      );
-
-      await FirebaseAuth.instance.signInWithCredential(credential);
+    // Skip Firebase verification and accept any 6-digit code
+    if (otp.length == 6 && RegExp(r'^[0-9]+$').hasMatch(otp)) {
+      // Simulate successful verification
       return true;
-    } catch (e) {
+    } else {
       _errorMessage = 'Invalid verification code';
       notifyListeners();
       return false;

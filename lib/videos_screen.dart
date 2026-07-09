@@ -353,6 +353,109 @@ class VideosScreen extends StatelessWidget {
     },
   };
 
+  String _getThumbnailUrl(String category, int level, int videoIndex) {
+    // Base URL for Google Drive images
+    // You'll need to replace these with the actual direct image URLs from your Google Drive
+    // To get direct URLs: Right-click on image in Drive → Share → Copy link → Replace /view with /uc?export=view
+    
+    final Map<String, Map<int, Map<int, String>>> thumbnailUrls = {
+             'Savings': {
+         0: { // Level 1
+           0: 'https://drive.google.com/uc?export=view&id=1EWh7uewXtAJmrtPZNmRjrs_oPp_iNZsq',
+           1: 'https://drive.google.com/uc?export=view&id=1_InlwZ1pfoQjmDOjhzk1SFgroBPJW2bc',
+           2: 'https://drive.google.com/uc?export=view&id=1sAjza6eUtyUTgL0GFd8lv-z40p6Yqzu2',
+           3: 'https://drive.google.com/uc?export=view&id=1d4CJqBXFDy7muq4CH9OBia6GBxbcuq1M',
+         },
+         1: { // Level 2
+           0: 'https://drive.google.com/uc?export=view&id=1IG-INl1XTydJqkiryul5ikA7EJWsVqvu',
+           1: 'https://drive.google.com/uc?export=view&id=1yiTdD99VTP_--ikItvZUMe4a6mhGndrD',
+           2: 'https://drive.google.com/uc?export=view&id=1h1W8zeoUpO-b1AbssRIUHzB2ZP6mzZDq',
+           3: 'https://drive.google.com/uc?export=view&id=1ZB2xGrAQlhhAjTUYpUhF28RRAdpRA8s0',
+         },
+         2: { // Level 3
+           0: 'https://drive.google.com/file/d/1bbLSCvLwLNvFdFILEmhwSyiackACi6X8/view?usp=drive_link',
+           1: 'https://drive.google.com/file/d/187bhsl0HladkcvzqEj5IvBh8l3eLXcc5/view?usp=drive_link',
+           2: 'https://drive.google.com/file/d/1rtWkOmXcoJL8LnHGKpbYJReMHPPezPy6/view?usp=drive_link',
+           3: 'https://drive.google.com/file/d/1ZPqknX4wf8KXvcv11ZDu1Dorvk6BPy82/view?usp=drive_link',
+         },
+       3: { // Level 4
+           0: 'https://drive.google.com/file/d/1NH_YB4ZRBcZ-4GSeIT7hUAgFi3RLJB0v/view?usp=drive_link',
+           1: 'https://drive.google.com/file/d/18i6zGBfEhyS5WD-hDu8zEBLt7CivGOrR/view?usp=drive_link',
+           2: 'https://drive.google.com/file/d/1KJ8gJKDyjjSbuoT8ze_nntRmwngLg4bZ/view?usp=drive_link',
+           3: 'https://drive.google.com/file/d/1kLaoRMoFUIgQaBd1YohQinH7_DKndwV4/view?usp=drive_link',
+         },
+         4: { // Level 5
+           0: 'https://drive.google.com/file/d/10asjI222UvyM8j6_2wGIc5TXQ7i_1Sou/view?usp=drive_link',
+           1: 'https://drive.google.com/file/d/19o_jen6OmsingUAKG-NDtsSdNoj9hv_R/view?usp=drive_link',
+           2: 'https://drive.google.com/file/d/1AxvGzA9M-4oDpLthyKtqhQ_N27IQGSu2/view?usp=drive_link',
+           3: 'https://drive.google.com/file/d/1LV6txtmyzGS3MlpxqEqiS4SkRl8YyZ0y/view?usp=drive_link',
+         },
+      },
+      'Budgeting': {
+        0: { // Level 1
+          0: 'https://drive.google.com/file/d/13qAGo4W35IMZTcdRotWAazHSrcDYbiyo/view?usp=drive_link',
+          1: 'https://drive.google.com/file/d/1DAyx7gajg-ZYbXmSsNfwiByA_e_cnxhi/view?usp=drive_link',
+          2: 'https://drive.google.com/file/d/1EppsdGEMnd_OmtYGgiwKq3fHuQGPpccS/view?usp=drive_link',
+          3: 'https://drive.google.com/file/d/118bw6P4WNUbI8zNAqhocbClyGQWycS6N/view?usp=drive_link',
+        },
+        1: { // Level 2
+          0: 'https://drive.google.com/file/d/1ymK6O5LlAJEqT5OOIOebQalMIcONljbj/view?usp=drive_link',
+          1: 'https://drive.google.com/file/d/1qKGWQa7sCiA7cayRrq17boAy0o6GPUy9/view?usp=drive_link',
+          2: 'https://drive.google.com/file/d/1P0wT3B2DjiHRfR3-CYtQ_sr_6HFRqoUR/view?usp=drive_link',
+          3: 'https://drive.google.com/file/d/1o1xWr8uGF7FskLfCAHlKwNnMSIpi9IJL/view?usp=drive_link',
+        },
+         2: { // Level 3
+          0: 'https://drive.google.com/file/d/1mw7AhzzaFYCUgsLoUMS7821mdBR94EPE/view?usp=drive_link',
+          1: 'https://drive.google.com/file/d/1x9hOwhfGwxFD4bn1_PZODyxapip_iEEZ/view?usp=drive_link',
+          2: 'https://drive.google.com/file/d/10DR3ONyu3ilYDX6ucHvCXgeWQKZNjaxD/view?usp=drive_link',
+          3: 'https://drive.google.com/file/d/123dOD5AALGeCjf6kFi1L_HA992M9XxA_/view?usp=drive_link',
+        },
+         3: { // Level 4
+          0: 'https://drive.google.com/file/d/1jPS48ardk5WhSaDj0SVrvC253M5b-_7r/view?usp=drive_link',
+          1: 'https://drive.google.com/file/d/19XYhygiGJLgaS-24JkdGSwgRA7QLYR0s/view?usp=drive_link',
+          2: 'https://drive.google.com/file/d/1LN-2-VnFUx3XVgw7xILeEokbuGMmXCYR/view?usp=drive_link',
+          3: 'https://drive.google.com/file/d/1LXmvJcRYsreCBnuImzPVryBbIxu7r1VL/view?usp=drive_link',
+        },
+         4: { // Level 5
+          0: 'https://drive.google.com/file/d/1eN6UH_nkoEbqOiZ3Le3akqKFKy6H9d4v/view?usp=drive_link',
+          1: 'https://drive.google.com/file/d/1uEKLpNjbxGcCw6scjqH0OE_onbHptOG8/view?usp=drive_link',
+          2: 'https://drive.google.com/file/d/1_heXTns7OiSsK1IO78kxyRZS882gaxbZ/view?usp=drive_link',
+          3: 'https://drive.google.com/file/d/1ecbxeCfTTymFGGRdcjXiDX40s5qJyolX/view?usp=drive_link',
+        },
+      },
+      'Numeracy': {
+        0: { // Level 1
+          0: 'https://drive.google.com/file/d/1s2lj1s_ngi9kr2Vp7SgJCosD5WYx1pI2/view?usp=drive_link',
+          1: 'https://drive.google.com/file/d/1L0k2CMeU4WBQUqRgmwBXYv5JG0CFdVcb/view?usp=drive_link',
+          2: 'https://drive.google.com/file/d/1yx5kgJC57t9yP15WfwS5dkJR7byGW1Mx/view?usp=drive_link',
+          3: 'https://drive.google.com/file/d/1zFMiQQvOk4XaxD7fau0cvAOhaPaypOCX/view?usp=drive_link',
+        },
+       1: { // Level 2
+          0: 'https://drive.google.com/file/d/1NYRiocBuYJjkmS7Qn0fZzKEjeEfF5Yf5/view?usp=drive_link',
+          1: 'https://drive.google.com/file/d/13PoLue9a-VCGb0yKEVvVIZQ4tu7b3QlP/view?usp=drive_link',
+          2: 'https://drive.google.com/file/d/1VrR3iurZAinkSJ0GRHoCHCB6plio7Dlp/view?usp=drive_link',
+          3: 'https://drive.google.com/file/d/16SlLmM7W8yWJ8WWnihpuW69OQ38GDVxu/view?usp=drive_link',
+        },
+        2: { // Level 3
+          0: 'https://drive.google.com/file/d/1YKTqu0XAn9i9m7krfWkApv1vII5LHiKL/view?usp=drive_link',
+          1: 'https://drive.google.com/file/d/1JYSU6BvvxJrAAJ6R7qO976bI_KwaK5f5/view?usp=drive_link',
+          2: 'https://drive.google.com/file/d/1HmXpVKrDJjNWkXUM2VEdvi1N6GjIG3CU/view?usp=drive_link',
+          3: 'https://drive.google.com/file/d/1nTsYmHMONuiOXnVYiqgr1bvLcRtl5mcB/view?usp=drive_link',
+        },
+        3: { // Level 4
+          0: 'https://drive.google.com/file/d/1OFX-yadBtxXgHdLMdy3ieDXuU7PQV3KJ/view?usp=drive_link',
+          1: 'https://drive.google.com/file/d/18PuhKZUy46F451Sck_soG2_6_2g9y--h/view?usp=drive_link',
+          2: 'https://drive.google.com/file/d/1mcDjdXXf8dYkeI1OxFxPohQhqB5oApkJ/view?usp=drive_link',
+          3: 'https://drive.google.com/file/d/1R3iF3W2RlX_wA0RoKHBIizRjOiN3EwNP/view?usp=drive_link',
+        },
+      },
+    };
+    
+    // Return the specific thumbnail URL or a default placeholder
+    return thumbnailUrls[category]?[level]?[videoIndex] ?? 
+           'https://via.placeholder.com/400x225/4A90E2/FFFFFF?text=Video+Thumbnail';
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
@@ -514,44 +617,79 @@ class VideosScreen extends StatelessWidget {
               borderRadius: BorderRadius.circular(12),
               child: Stack(
                 children: [
-                  // Thumbnail background
+                  // Thumbnail background with external image
                   Container(
                     width: double.infinity,
                     height: double.infinity,
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [
-                          Colors.blue.shade100,
-                          Colors.purple.shade100,
-                        ],
-                      ),
-                    ),
-                    child: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.video_library,
-                            size: 40,
-                            color: Colors.grey.shade600,
-                          ),
-                          SizedBox(height: 8),
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 16),
-                            child: Text(
-                              description,
-                              textAlign: TextAlign.center,
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                              style: GoogleFonts.manrope(
-                                fontSize: 12,
-                                color: Colors.grey.shade700,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: Image.network(
+                        _getThumbnailUrl(category, level, videoIndex),
+                        fit: BoxFit.cover,
+                        loadingBuilder: (context, child, loadingProgress) {
+                          if (loadingProgress == null) return child;
+                          return Container(
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                                colors: [
+                                  Colors.blue.shade100,
+                                  Colors.purple.shade100,
+                                ],
                               ),
                             ),
-                          ),
-                        ],
+                            child: Center(
+                              child: CircularProgressIndicator(
+                                value: loadingProgress.expectedTotalBytes != null
+                                    ? loadingProgress.cumulativeBytesLoaded /
+                                        loadingProgress.expectedTotalBytes!
+                                    : null,
+                                color: Colors.grey.shade600,
+                              ),
+                            ),
+                          );
+                        },
+                        errorBuilder: (context, error, stackTrace) {
+                          return Container(
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                                colors: [
+                                  Colors.blue.shade100,
+                                  Colors.purple.shade100,
+                                ],
+                              ),
+                            ),
+                            child: Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.video_library,
+                                    size: 40,
+                                    color: Colors.grey.shade600,
+                                  ),
+                                  SizedBox(height: 8),
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(horizontal: 16),
+                                    child: Text(
+                                      description,
+                                      textAlign: TextAlign.center,
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: GoogleFonts.manrope(
+                                        fontSize: 12,
+                                        color: Colors.grey.shade700,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
                       ),
                     ),
                   ),

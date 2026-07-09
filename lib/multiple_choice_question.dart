@@ -33,24 +33,46 @@ class MultipleChoiceQuestion extends StatelessWidget {
             ),
             child: Column(
               children: [
-                // Header with back and progress
-                Stack(
-                  alignment: Alignment.center,
+                // Header with back, progress, and X2 multiplier
+                Row(
                   children: [
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: IconButton(
-                        onPressed: () => Navigator.pop(context),
-                        icon: const Icon(Icons.arrow_back),
+                    IconButton(
+                      onPressed: () => Navigator.pop(context),
+                      icon: const Icon(Icons.arrow_back),
+                    ),
+                    Expanded(
+                      child: Center(
+                        child: Text(
+                          "Question ${provider.currentQuestionNumber}/${provider.totalQuestions}",
+                          style: GoogleFonts.manrope(
+                            fontSize: 17,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
                       ),
                     ),
-                    Text(
-                      "Question ${provider.currentQuestionNumber}/${provider.totalQuestions}",
-                      style: GoogleFonts.manrope(
-                        fontSize: 17,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
+                    // X2 Multiplier Display
+                    if (provider.showX2Multiplier)
+                      Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          color: Colors.black,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Center(
+                          child: Text(
+                            "X2",
+                            style: GoogleFonts.manrope(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w700,
+                              color: const Color(0xFFFFC300),
+                            ),
+                          ),
+                        ),
+                      )
+                    else
+                      const SizedBox(width: 40), // Placeholder to maintain layout
                   ],
                 ),
                 _buildProgressHeader(context),
@@ -114,7 +136,7 @@ class MultipleChoiceQuestion extends StatelessWidget {
   }
 
   Widget _buildProgressHeader(BuildContext context) {
-    final provider = Provider.of<QuizProvider>(context, listen: false);
+    final provider = Provider.of<QuizProvider>(context, listen: true);
     final progress = provider.progress;
 
     return Padding(

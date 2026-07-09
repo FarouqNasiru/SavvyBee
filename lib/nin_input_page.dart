@@ -16,17 +16,18 @@ class NinInputPage extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => NinProvider(),
       child: Scaffold(
+        backgroundColor: Colors.white,
         appBar: AppBar(
           leading: IconButton(
             icon: Image.asset(
-              'lib/assets/images/solar_close-square-linear.png', // Replace with your image path
-              height: 20, // Adjust size as needed
-              width: 20, // Adjust size as needed
+              'lib/assets/images/solar_close-square-linear.png',
+              height: 20,
+              width: 20,
             ),
             onPressed: () {
               Navigator.of(context).pushReplacement(
                 MaterialPageRoute(builder: (context) => HomePage()),
-              ); // Navigate back when the button is pressed
+              );
             },
           ),
           backgroundColor: Colors.white,
@@ -42,7 +43,7 @@ class NinInputPage extends StatelessWidget {
           ),
           // Placeholder for spacing
         ),
-        backgroundColor: Colors.white,
+      
         body: Padding(
           padding: const EdgeInsets.only(
               bottom: 40.0, top: 0, left: 16.0, right: 16.0),

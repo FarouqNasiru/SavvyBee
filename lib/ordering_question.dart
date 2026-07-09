@@ -69,25 +69,47 @@ class _OrderingQuestionState extends State<OrderingQuestion> {
                 ),
                 child: Column(
                   children: [
-                    Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: IconButton(
-                        onPressed: () => Navigator.pop(context),
-                        icon: const Icon(Icons.arrow_back),
-                      ),
+                    Row(
+                      children: [
+                        IconButton(
+                          onPressed: () => Navigator.pop(context),
+                          icon: const Icon(Icons.arrow_back),
+                        ),
+                        Expanded(
+                          child: Center(
+                            child: Text(
+                              "Question ${provider.currentQuestionNumber}/${provider.totalQuestions}",
+                              style: GoogleFonts.manrope(
+                                fontSize: 17,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ),
+                        ),
+                        // X2 Multiplier Display
+                        if (provider.showX2Multiplier)
+                          Container(
+                            width: 40,
+                            height: 40,
+                            decoration: BoxDecoration(
+                              color: Colors.black,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Center(
+                              child: Text(
+                                "X2",
+                                style: GoogleFonts.manrope(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700,
+                                  color: const Color(0xFFFFC300),
+                                ),
+                              ),
+                            ),
+                          )
+                        else
+                          const SizedBox(width: 40), // Placeholder to maintain layout
+                      ],
                     ),
-                    Text(
-                      "Question ${provider.currentQuestionNumber}/${provider.totalQuestions}",
-                      style: GoogleFonts.manrope(
-                        fontSize: 17,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ],
-                ),
                     // Progress bar and close button
                     _buildProgressHeader(context),
                     SizedBox(height: isSmallScreen ? 20 : 30),
@@ -222,7 +244,7 @@ class _OrderingQuestionState extends State<OrderingQuestion> {
   }
 
   Widget _buildProgressHeader(BuildContext context) {
-    final provider = Provider.of<QuizProvider>(context, listen: false);
+    final provider = Provider.of<QuizProvider>(context, listen: true);
     final progress = provider.progress;
 
     return Padding(
